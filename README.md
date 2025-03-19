@@ -34,7 +34,7 @@ Assignment 1/
 ```
 
 ```
-fitts (Assignment 2)/
+Assignment 2 (fitts)/
 ```
 
 ---
