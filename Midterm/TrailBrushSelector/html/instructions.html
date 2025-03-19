@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <title>Study Instructions</title>
+    </head>
+    <body>
+        <br>
+        <div class="container">
+            <div class="row center" id="instructions">
+                <h2>Instructions</h2>
+                <p>
+                    Welcome to my pointing device evaluation study. This study is designed to assess how users interact with a trail-based selection technique. The experiment will take approximately 5 minutes to complete.
+                </p>
+
+                <h3>Study Objective</h3>
+                <p>
+                    During this study, you will be asked to interact with randomly positioned targets on the screen using a **crossing-based selection technique** rather than traditional clicking.
+                    The goal is to select required targets while avoiding unnecessary selections. Your speed and accuracy will be measured.
+                </p>
+
+                <h3>How to Use the Selection Tool</h3>
+                <ul>
+                    <li><strong>Activate the Brush Mode:</strong> Press CTRL on your keyboard to activate/deactivate the selection brush. A custom cursor (a white circle with an "X") will appear.</li>
+                    <li><strong>Start Selecting Targets:</strong> While holding CTRL, press and hold the left mouse button. This will create a selection trail as you move hte mouse around.</li>
+                    <li><strong>Selection Delay:</strong> A short delay (250ms) is required before a selection is confirmed.</li>
+                    <li><strong>Auto-Grouping:</strong> Nearby targets may be *automatically selected together if they are close enough, simulating real-world pointing behavior.</li>
+                    <li><strong>Deselecting Items:</strong> If you make an incorrect selection, you can right-click (while in brush mode, so the circle with the X is visible) on the item to deselect it.</li>
+                    <li><strong>Advancing Trials:</strong> Once you are satisfied with your selections, click the *"Next Trial"* button to proceed.</li>
+                    <li><strong>Recording Data:</strong> Your trial results, including TIME TAKEN, ACCURACY, AND SELECTION BEHAVIOR, will be logged for analysis.</li>
+                </ul>
+
+                <h3>What Data is Collected?</h3>
+                <p>The system will automatically track the following metrics during each trial:</p>
+                <ul>
+                    <li><strong>Time Taken</strong> – How long it takes to complete the selection.</li>
+                    <li><strong>Correct Selections</strong> – Number of required targets selected.</li>
+                    <li><strong>Incorrect Selections</strong> – Number of extra/non-targets selected.</li>
+                    <li><strong>Deselection Actions</strong> – How often users undo a selection.</li>
+                    <li><strong>Overall Accuracy</strong> – The percentage of correct selections.</li>
+                </ul>
+
+                <p>
+                    Once all trials are completed, you will be presented with a summary of your performance and the option to download your data as a CSV!.
+                </p>
+                <br>
+                <button class="btn btn-secondary" onclick="location.href='training.html'" style="width: 200px;">Try out Brush!</button>
+            </div>
+        </div>
+    </body>
+</html>
