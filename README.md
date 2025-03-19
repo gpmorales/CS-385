@@ -1,5 +1,3 @@
-# George Morales
-
 ## Hello! Welcome to my CS 385 Repository 
 
 ### Repo Overview
