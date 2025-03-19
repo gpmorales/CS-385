@@ -30,7 +30,6 @@ class TrialData {
 }
 
 
-
 // **************************** Training Page Event Listener ****************************
 document.addEventListener("DOMContentLoaded", () => {
     // Create custom brush, trail logic, and more
@@ -67,19 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
-
-        // Utility functions
-        function getNearbyRects(rect, threshold = 50) {
-            const rectBounds = rect.getBoundingClientRect();
-            return Array.from(document.querySelectorAll(".random-rectangle")).filter(otherRect => {
-                if (rect === otherRect) return false; // Skip itself
-                const otherBounds = otherRect.getBoundingClientRect();
-                return (
-                    Math.abs(rectBounds.left - otherBounds.left) < threshold &&
-                    Math.abs(rectBounds.top - otherBounds.top) < threshold
-                );
-            });
-        }
 
         // Update the trail and target selection
         document.addEventListener("mousemove", (e) => {
@@ -150,6 +136,20 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+        // Right-click to deselect a highlighted item if custom cursor is active
+        document.addEventListener("contextmenu", (e) => {
+            if (isCustomCursorActive) {
+                e.preventDefault(); // Prevent default right-click menu
+                const rect = document.elementFromPoint(e.clientX, e.clientY);
+                if (rect && rect.classList.contains("random-rectangle")) {
+                    if (confirmedRects.has(rect)) {
+                        rect.classList.remove("highlighted"); // Remove highlight
+                        confirmedRects.delete(rect); // Properly remove from confirmed selections
+                    }
+                }
+            }
+        });
+
         // Fade trail after we move mouse up and there was a non-empty path
         document.addEventListener("mouseup", () => {
             if (path) {
@@ -159,21 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             isMouseDown = false;
             hoveredRects.clear();
-        });
-
-        // Right-click to deselect a highlighted item if custom cursor is active
-        document.addEventListener("contextmenu", (e) => {
-            if (isCustomCursorActive) {
-                e.preventDefault(); // Prevent default right-click menu
-                const rect = document.elementFromPoint(e.clientX, e.clientY);
-                if (rect && rect.classList.contains("random-rectangle")) {
-                    currentTrial.totalSelections--; // Remove selection
-                    if (confirmedRects.has(rect)) {
-                        rect.classList.remove("highlighted"); // Remove highlight
-                        confirmedRects.delete(rect); // Properly remove from confirmed selections
-                    }
-                }
-            }
         });
 
         // Prevent unwanted deselection when the brush is inactive
@@ -223,19 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
-
-        // Utility functions
-        function getNearbyRects(rect, threshold = 50) {
-            const rectBounds = rect.getBoundingClientRect();
-            return Array.from(document.querySelectorAll(".random-rectangle")).filter(otherRect => {
-                if (rect === otherRect) return false; // Skip itself
-                const otherBounds = otherRect.getBoundingClientRect();
-                return (
-                    Math.abs(rectBounds.left - otherBounds.left) < threshold &&
-                    Math.abs(rectBounds.top - otherBounds.top) < threshold
-                );
-            });
-        }
 
         // Update the trail and target selection
         document.addEventListener("mousemove", (e) => {
@@ -385,21 +357,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.addEventListener("mouseleave", () => {
             hoveredRects.clear();
         });
-
-        // OPTIONAL: add a glow filter for a smooth effect
-        const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-        defs.innerHTML = `
-            <filter id="blur-filter">
-                <feGaussianBlur stdDeviation="3" result="blur"/>
-                <feMerge>
-                    <feMergeNode in="blur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-        `;
-
-        // Add blur
-        svg.appendChild(defs);
     }
 });
 
@@ -484,3 +441,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+
+// Utility functions:
+function getNearbyRects(rect, threshold = 50) {
+    const rectBounds = rect.getBoundingClientRect();
+    return Array.from(document.querySelectorAll(".random-rectangle")).filter(otherRect => {
+        if (rect === otherRect) return false; // Skip itself
+        const otherBounds = otherRect.getBoundingClientRect();
+        return (
+            Math.abs(rectBounds.left - otherBounds.left) < threshold &&
+            Math.abs(rectBounds.top - otherBounds.top) < threshold
+        );
+    });
+}
