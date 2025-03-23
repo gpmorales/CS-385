@@ -1,8 +1,8 @@
 // Global vars and constants
 let TARGET_COUNT = Math.floor(Math.random() * 4) + 3; // Random between 3-6
 let TOTAL_ITEM_COUNT = Math.floor(Math.random() * 6) + 10; // Random between 10-15
-const SELECTION_DELAY = 250; // time in ms user must hover over target in order to select it
-const TRIAL_COUNT = 5; // number of total trials
+const SELECTION_DELAY = 100; // time in ms user must hover over target in order to select it
+const TRIAL_COUNT = 12; // number of total trials
 let isMouseDown = false;
 
 // Data collection for each trial
