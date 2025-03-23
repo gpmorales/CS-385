@@ -4,7 +4,7 @@
 This repository contains all deliverables for Assignment 1, Assignment 2 (/fitts), and my Midterm. 
 These projects focus on designing and evaluating different interaction techniques through user feedback and prototyping.
 
-### Commonm Content
+### Common Content
 1. **Consent Form**
    - Social/behavioral template from Emory
    - Used for semi-structured interviews
