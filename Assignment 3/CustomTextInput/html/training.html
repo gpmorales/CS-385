@@ -9,6 +9,7 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
         <link rel="stylesheet" href="/css/styles.css">
         <script src="/js/index.js"></script>
+        <script src="/js/phrases.js"></script>
         <title>Training</title>
     </head>
     <body>
@@ -20,7 +21,16 @@
                 <hr>
             </div>
         </div>
-        <input type="text" id="text-output" class="form-control" style="width: 500px; height: 300px; margin: 20px auto;" readonly>
+        <br>
+
+        <div id="phrase-display"
+             style="border: 2px solid #ccc; padding: 15px; width: 500px; margin: 0 auto 20px auto;
+             text-align: center; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">
+        </div>
+
+        <input type="text" id="text-output" class="form-control"
+               placeholder="Your swipe text will appear here..."
+               style="border: 1px solid #ccc; width: 500px; height: 150px; margin: 50px auto;" readonly>
 
         <div class="simple-keyboard" id="keyboard-container" style="width: 900px; margin: 50px auto;"></div>
 
@@ -30,11 +40,20 @@
                 Start Trials
             </button>
             <button id="next-trial-btn" class="btn btn-primary"
-                    onclick="generateRandomRectangles('demo-area', { width: 800, height: 500 });">
+                    onclick="getNextPhrase();">
                 Next Phrase
             </button>
         </div>
 
         <svg id="cursor-trail-svg" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></svg>
+
+        <script>
+            function getNextPhrase() {
+                const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+                document.getElementById("phrase-display").textContent = randomPhrase;
+            }
+            getNextPhrase()
+        </script>
+
     </body>
 </html>

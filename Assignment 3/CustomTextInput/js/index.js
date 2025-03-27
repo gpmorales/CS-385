@@ -51,28 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let path = null;
         let points = [];
 
-        // Create custom cursor
+        // Get cursor
         const cursor = document.createElement("div");
-        cursor.id = "custom-cursor";
-        document.body.appendChild(cursor);
-
-        // Toggle logic for custom cursor
-        let isBrushModeActive = false; // Tracks if cursor is active
-
-
-        // Toggle custom cursor when Ctrl is pressed (latch on/off)
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Control") {
-                isBrushModeActive = !isBrushModeActive; // Toggle state
-                if (isBrushModeActive) {
-                    document.documentElement.style.cursor = "none"; // Hide default cursor
-                    cursor.style.display = "block"; // Show custom cursor
-                } else {
-                    document.documentElement.style.cursor = ""; // Restore default cursor
-                    cursor.style.display = "none"; // Hide custom cursor
-                }
-            }
-        });
 
         let trailFadeTimeout;
         const hoveredKeys = new Set();
@@ -115,9 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         const lastSelect = keySelectTimestamps.get(button) || 0;
                         const now = performance.now();
 
-                        // If we are still inside after hovering, in brush mode, and the cool down hsa passed down
-                        // then and only then select this key
-                        if (stillInside && isMouseDown && isBrushModeActive && now - lastSelect > RESELECT_COOLDOWN) {
+                        // If we are still inside after hovering, and the cool down hsa passed down then and only then select this key
+                        if (stillInside && isMouseDown && now - lastSelect > RESELECT_COOLDOWN) {
                             keySelectTimestamps.set(button, now);
                             button.classList.add("selected-confirmed");
 
@@ -163,7 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-
         document.addEventListener("mouseup", () => {
             hoveredKeys.clear();
             keySelectTimestamps.clear(); // allow keys to be selected again in the next drag
@@ -171,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Draw trail path
         document.addEventListener("mousedown", (e) => {
-            if (e.button === 0 && isBrushModeActive) {
+            if (e.button === 0) {
                 points = []; // Reset points
                 isMouseDown = true;
                 path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -227,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const csv = [headers, ...rows].join('\n');
 
             // Create and download CSV file
-            const blob = new Blob([csv], { type: 'text/csv' });
+            const blob = new Blob([csv], {type: 'text/csv'});
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
