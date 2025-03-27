@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Summary</title>
+</head>
+<body>
+    <br>
+    <h1 style="margin-left: 5.5rem">Trial Results</h1>
+    <hr>
+    <br>
+    <div class="table-responsive" style="width: 1600px; margin-left: auto; margin-right: auto; overflow-x: auto;">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Trial #</th>
+                <th>Total Items on Canvas</th>
+                <th>Number of Targets</th>
+                <th>Number of Correct Selections (Targets)</th>
+                <th>Number of Incorrect Selections (Non-Targets)</th>
+                <th>Number of Deselected Targets</th>
+                <th>Number of Deselected Non-Targets</th>
+                <th>Time Taken (s)</th>
+                <th>Total Deselection Rate (%)</th>
+                <th>Target Deselection Rate (%)</th>
+                <th>Net Accuracy (%)</th>
+                <th>All Targets Marked</th>
+            </tr>
+            </thead>
+            <tbody id="resultsTable"></tbody>
+        </table>
+    </div>
+    <br>
+    <div class="container">
+        <button id="downloadCSV" class="btn btn-primary mb-3">Download Results CSV</button>
+    </div>
+    <script src="/js/index.js"></script>
+</body>
+</html>

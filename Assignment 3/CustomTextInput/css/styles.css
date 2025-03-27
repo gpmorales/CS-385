@@ -1,0 +1,67 @@
+.img {
+    z-index: 1;
+}
+
+.target {
+    width: 50px;
+    height: 50px;
+    background: grey;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.active {
+    background: red;
+}
+
+#instructions {
+    position: absolute;
+    top: 5%;
+    left: 20%;
+}
+
+body {
+    user-select: none;
+}
+
+
+/* Custom cursor styles */
+#custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    border: 2px solid black;
+    display: none;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+}
+
+#custom-cursor::before,
+#custom-cursor::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    bottom: 44%;
+}
+
+#custom-cursor::before {
+    transform: rotate(45deg);
+}
+
+#custom-cursor::after {
+    transform: rotate(-45deg);
+}
+
+.hg-button.selected-confirmed {
+    background-color: #e0e0e0;
+    transition: background-color 0.25s ease;
+}
+
+.hg-button {
+    cursor: none !important;
+}
