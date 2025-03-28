@@ -9,6 +9,7 @@
   },
   "private": true,
   "dependencies": {
+    "CustomTextInput": "file:",
     "express": "^4.21.2"
   },
   "devDependencies": {

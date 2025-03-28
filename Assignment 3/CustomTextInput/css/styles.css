@@ -1,34 +1,73 @@
 .img {
-    z-index: 1;
+  z-index: 1;
 }
 
 .target {
-    width: 50px;
-    height: 50px;
-    background: grey;
-    position: absolute;
-    border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background: grey;
+  position: absolute;
+  border-radius: 50%;
 }
 
 .active {
-    background: red;
+  background: red;
 }
 
 #instructions {
-    position: absolute;
-    top: 5%;
-    left: 20%;
+  position: absolute;
+  top: 5%;
+  left: 20%;
 }
 
 body {
-    user-select: none;
+  user-select: none;
 }
 
 .hg-button.selected-confirmed {
-    background-color: #e0e0e0;
-    transition: background-color 0.25s ease;
+  background-color: #e0e0e0;
+  transition: background-color 0.25s ease;
 }
 
 .hg-button {
-    cursor: default !important;
+  cursor: default !important;
+}
+
+.hg-button {
+  pointer-events: none; /* disable native input */
+}
+
+.hg-button * {
+  pointer-events: all; /* allow your own JS to work */
+}
+
+/* Base keyboard sizing */
+.simple-keyboard {
+  /* Increase overall keyboard width */
+  width: 1200px; /* Optional: set a maximum width */
+  margin: 0 auto; /* Center the keyboard */
+}
+
+/* Key sizing */
+.hg-button {
+  /* Increase key size */
+  font-size: 17px; /* Larger font size */
+  margin: 5px; /* Add some spacing between keys */
+}
+
+/* Responsive sizing for different screen sizes */
+@media (max-width: 768px) {
+  .hg-button {
+    min-height: 50px;
+    min-width: 40px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hg-button {
+    min-height: 70px;
+    min-width: 60px;
+    font-size: 20px;
+  }
 }
