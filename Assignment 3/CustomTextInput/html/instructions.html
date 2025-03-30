@@ -19,21 +19,22 @@
                 <hr>
                 <h3>Study Objective</h3>
                 <p>
-                    During this study, you will be asked to enter text using a custom swipe-based keyboard interface. Instead of tapping individual keys, you will glide the cursor across letters to input text.
-                    This technique aims to evaluate the efficiency of gesture-driven text entry compared to traditional keyboard typing. Your speed and accuracy will be measured across multiple trials.
+                    During this study, you will either be asked to enter text using a custom swipe-based keyboard interface or a traditional keyboard.
+                    We will evaluate the efficiency of the gesture-driven text entry compared to traditional keyboard typing.
+                    Your speed and accuracy will be measured across multiple trials for both entry methods.
                 </p>
                 <hr>
-                <h4>How to Use the Swipe Keyboard</h4>
+                <h4>How to Use the SWIPE Keyboard</h4>
                 <br>
                 <br>
                 <ul>
-                    <li><strong>Activate Brush Mode:</strong> Press the <kbd>CTRL</kbd> key to toggle the swipe brush. A custom cursor (a white circle with an “X”) will appear when the brush is active.</li>
-                    <li><strong>Entering Text:</strong> While in brush mode, press and hold the left mouse button. Move the cursor across keys to input letters. Keys are selected after a brief hover.</li>
+                    <li><strong>Entering Text:</strong> Press and hold the left mouse button. Move the cursor across keys to input letters. Keys are selected after a brief hover.</li>
                     <li><strong>Selection Delay:</strong> A short delay (e.g., 250ms) is required while hovering over a key before it is selected to prevent accidental input.</li>
-                    <li><strong>Visual Feedback:</strong> As you swipe, a glowing trail will appear and selected keys will briefly highlight.</li>
-                    <li><strong>Backspace:</strong> If available, hover over the backspace key to remove the last character.</li>
+                    <li><strong>Visual Feedback:</strong> As you swipe, a trail will appear and selected keys will briefly be highlighted.</li>
+                    <li><strong>Backspace:</strong> Use the RIGHT mouse button to remove the last character.</li>
+                    <li><strong>Auto Spacing:</strong> On the release of the left mouse button, assuming a word has been finished being selected, a space will be added automatically.</li>
                     <li><strong>Practice Trials:</strong> You will begin with 5 practice trials to get comfortable with the technique.</li>
-                    <li><strong>Test Trials:</strong> You will then complete 15 timed test trials per block, for a total of 2 blocks (40 trials).</li>
+                    <li><strong>Test Trials:</strong> You will then complete 15 timed test trials per block, for a total of 2 times/blocks (40 trials).</li>
                 </ul>
                 <hr>
                 <br>
@@ -46,9 +47,15 @@
                     <li><strong>Error Rate</strong> – The number of mistakes made during text entry.</li>
                     <li><strong>Efficiency</strong> – Net words per minute (WPM) based on input quality and speed.</li>
                 </ul>
-                <button class="btn btn-secondary" onclick="location.href='training.html'"
-                        style="position: fixed; bottom: 50px; right: 100px; width: 200px; z-index: 1000;">
-                    Go to Practice Trials
+
+                <button class="btn btn-primary" onclick="location.href='QwertyTraining.html'"
+                        style="position: fixed; bottom: 70px; right: 100px; width: 200px; z-index: 1000;">
+                    Go to QWERTY Practice Trials
+                </button>
+
+                <button class="btn btn-primary" onclick="location.href='SwipeTraining.html'"
+                        style="position: fixed; bottom: 150px; right: 100px; width: 200px; z-index: 1000;">
+                    Go to Swipe Keyboard Practice Trials
                 </button>
             </div>
         </div>

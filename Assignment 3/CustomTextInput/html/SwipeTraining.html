@@ -18,7 +18,7 @@
     <br />
     <div class="container">
         <div class="row center">
-            <h2>Training Area</h2>
+            <h2>Swipe Training Area</h2>
             <br />
             <hr />
         </div>
@@ -27,7 +27,7 @@
 
     <div id="phrase-display" style="
             border: 2px solid #ccc;
-            padding: 15px;
+            padding: 20px;
             width: 500px;
             margin: 0 auto 20px auto;
             text-align: center;
@@ -36,30 +36,30 @@
             border-radius: 8px;
           "></div>
 
-    <input type="text" id="text-output" class="form-control" placeholder="Your swipe text will appear here..." style="
+    <input type="text" id="text-output" class="form-control" placeholder="Your swipe text will appear here..."
+           style="
             border: 1px solid #ccc;
             width: 500px;
             height: 70px;
-            margin: 25px auto;
+            margin: 40px auto;
           " readonly />
 
     <div style="position: relative; max-width: 1200px; margin: 0 auto;">
         <div class="simple-keyboard" id="keyboard-container"></div>
-
         <div style="
         position: absolute; 
-        top: 50%; 
-        right: -120px; 
+        top: 50%;
+        right: -160px;
         transform: translateY(-50%);
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.2rem;
     ">
-            <button id="generate-targets-btn" class="btn btn-secondary" onclick="location.href='testing.html'">
-                Start Trials
-            </button>
-            <button id="next-trial-btn" class="btn btn-primary" onclick="getNextPhrase();">
+            <button id="next-trial-btn" class="btn btn-primary" style="height: 47px;" onclick="getNextPhrase();">
                 Next Phrase
+            </button>
+            <button id="generate-targets-btn" class="btn btn-secondary" style="height: 47px;" onclick="location.href='SwipeTesting.html'">
+                Start Trials
             </button>
         </div>
     </div>

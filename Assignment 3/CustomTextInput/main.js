@@ -13,20 +13,28 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/html/introduction.html'));
 });
 
-app.get('/testing.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/html/testing.html'));
+app.get('/instructions.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/html/instructions.html'));
 });
 
-app.get('/training.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/html/training.html'));
+app.get('/SwipeTraining.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/html/SwipeTraining.html'));
+});
+
+app.get('/SwipeTesting.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/html/SwipeTesting.html'));
+});
+
+app.get('/QwertyTraining.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/html/QwertyTraining.html'));
+});
+
+app.get('/QwertyTesting.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/html/QwertyTesting.html'));
 });
 
 app.get('/summary.html', (req, res) => {
     res.sendFile(path.join(__dirname, '/html/summary.html'));
-});
-
-app.get('/instructions.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/html/instructions.html'));
 });
 
 // App Entrypoint

@@ -1,9 +1,8 @@
 // Global vars and constants
-const SELECTION_DELAY = 150; // time in ms user must hover over target in order to select it
-const RESELECT_COOLDOWN = 150; // milliseconds
-const TRAIL_THROTTLE = 15; // ms
-
-const TRIAL_COUNT = 12; // number of total trials
+const SELECTION_DELAY = 175;    // time in ms user must hover over target in order to select it
+const RESELECT_COOLDOWN = 150;  // milliseconds
+const TRAIL_THROTTLE = 15;      // milliseconds
+const TRIAL_COUNT = 5;         // number of total trials
 
 // Data collection for each trial
 let currentTrial = null;
@@ -152,6 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.button === 2) {
         const outputBox = document.getElementById("text-output");
         outputBox.value = outputBox.value.slice(0, -1);
+        currentTrial.backspaceCount++;
       } else if (e.button === 0) {
         points = []; // Reset points
         isMouseDown = true;
@@ -227,6 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
 // **************************** Summary Page Event Listener ****************************
 document.addEventListener("DOMContentLoaded", () => {
   if (document.title === "Summary") {
@@ -242,29 +243,17 @@ document.addEventListener("DOMContentLoaded", () => {
     trialData.forEach((trial) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-                <td>${trial.trialNumber}</td>
-                <td>${trial.totalItemCount}</td>
-                <td>${trial.targetCount}</td>
-                <td>${trial.correctSelections}</td>
-                <td>${trial.incorrectSelections}</td>
-                <td>${trial.deselectedTargets}</td>
-                <td>${trial.deselectedNonTargets}</td>
-                <td>${trial.timeTaken.toFixed(2)}</td>
-                <td>${(
-                  ((trial.deselectedTargets + trial.deselectedNonTargets) /
-                    trial.totalSelections) *
-                  100
-                ).toFixed(1)}%</td>
-                <td>${(
-                  (trial.deselectedTargets / trial.correctSelections) *
-                  100
-                ).toFixed(1)}%</td>
-                <td>${(
-                  (trial.correctSelections / trial.targetCount) *
-                  100
-                ).toFixed(1)}%</td>
-                <td>${trial.incorrectSelections === 0 ? "✓" : "✗"}</td>
-            `;
+        <td>${trial.trialNumber}</td>
+        <td>${trial.promptPhrase}</td>
+        <td>${trial.userInput}</td>
+        <td>${trial.totalKeystrokes}</td>
+        <td>${trial.correctCharacters}</td>
+        <td>${trial.incorrectCharacters}</td>
+        <td>${trial.characterErrorRate.toFixed(1)}%</td>
+        <td>${trial.wordsPerMinute.toFixed(1)}</td>
+        <td>${trial.backspaceCount}</td>
+        <td>${trial.timeTaken.toFixed(2)}s</td>
+      `;
       tableBody.appendChild(row);
     });
 
@@ -286,13 +275,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
 // Utility functions
 function getNextPhrase() {
   const phraseDisplay = document.getElementById("phrase-display");
   const inputBox = document.getElementById("text-output");
 
-  // Save completed trial
-  if (currentTrial) {
+  // Save the current trial
+  if (currentTrial && trialNumber > 0) {
     currentTrial.endTrial();
     currentTrial.userInput = inputBox.value;
 
@@ -308,22 +298,15 @@ function getNextPhrase() {
 
     currentTrial.correctCharacters = correct;
     currentTrial.incorrectCharacters = incorrect;
-    currentTrial.characterErrorRate = (incorrect / expected.length) * 100;
-    currentTrial.wordsPerMinute =
-      (expected.length / 5 / currentTrial.timeTaken) * 60;
+    currentTrial.characterErrorRate = (incorrect / Math.max(actual.length, 1)) * 100;
+    currentTrial.wordsPerMinute = actual.length === 0 ? 0 : (actual.length / 5 / currentTrial.timeTaken) * 60;
 
     trialData.push(currentTrial);
   }
 
-  // Check if training complete
-  if (document.title === "Training" && trialNumber >= 5) {
-    localStorage.setItem("trainingData", JSON.stringify(trialData));
-    location.href = "testing.html";
-    return;
-  }
-
   // Check if testing complete
-  if (document.title === "Testing" && trialNumber >= 15) {
+  if (document.title === "Testing" && trialNumber === TRIAL_COUNT) {
+    console.log(trialData)
     localStorage.setItem("trialData", JSON.stringify(trialData));
     location.href = "summary.html";
     return;
@@ -337,12 +320,7 @@ function getNextPhrase() {
   currentTrial = new TrialData(++trialNumber, currentRandomPhrase);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.title === "Training" || document.title === "Testing") {
-    getNextPhrase();
-  }
-});
-
+// Misc Listeners
 document.addEventListener("DOMContentLoaded", () => {
   if (document.title === "Training" || document.title === "Testing") {
     if (document.title === "Testing") {
