@@ -19,9 +19,8 @@ class TrialData {
     this.endTime = null; // When the trial ended
     this.timeTaken = null; // Duration of the trial (ms)
     this.totalKeystrokes = 0; // Total keys selected
-    this.correctCharacters = 0; // Correctly matched characters
-    this.incorrectCharacters = 0; // Incorrect characters
-    this.characterErrorRate = 0; // % of incorrect characters
+    this.characterErrorRate = 0; // % of incorrect characters using edit distance
+    this.accuracy = 0;  // adjusted accuracy calculated using edit distance
     this.wordsPerMinute = 0; // Text entry speed (WPM)
     this.backspaceCount = 0; // Number of backspace actions
   }
@@ -32,16 +31,11 @@ class TrialData {
   }
 }
 
-window.addEventListener("load", () => {
-  if (document.title === "Training" || document.title === "Testing") {
-    const keyboard = new SimpleKeyboard.default();
-  }
-});
 
-// **************************** Keyboard Event Listener ****************************
+// **************************** Swipe Keyboard Event Listener ****************************
 document.addEventListener("DOMContentLoaded", () => {
   // Create custom brush, trail logic, and more
-  if (document.title === "Training" || document.title === "Testing") {
+  if (document.title === "SwipeTraining" || document.title === "SwipeTesting") {
     // Use an SVG element to create trail
     const svg = document.getElementById("cursor-trail-svg");
 
@@ -62,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentSwipeWord = ""; // Auto space word
 
     document.addEventListener("mousemove", (e) => {
-      hasMovedSinceMouseDown = true;
       cursor.style.left = `${e.clientX}px`;
       cursor.style.top = `${e.clientY}px`;
 
@@ -78,11 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Add event listener for each button
       document.querySelectorAll(".hg-button").forEach((button) => {
         const bounds = button.getBoundingClientRect();
-        const isHovered =
-          e.clientX >= bounds.left &&
-          e.clientX <= bounds.right &&
-          e.clientY >= bounds.top &&
-          e.clientY <= bounds.bottom;
+        const isHovered = e.clientX >= bounds.left && e.clientX <= bounds.right && e.clientY >= bounds.top && e.clientY <= bounds.bottom;
 
         // On hover
         if (isHovered && !hoveredKeys.has(button)) {
@@ -101,11 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const now = performance.now();
 
             // If we are still inside after hovering, and the cool down hsa passed down then and only then select this key
-            if (
-              stillInside &&
-              isMouseDown &&
-              now - lastSelect > RESELECT_COOLDOWN
-            ) {
+            if (stillInside && isMouseDown && (now - lastSelect) > RESELECT_COOLDOWN) {
               keySelectTimestamps.set(button, now);
               button.classList.add("selected-confirmed");
 
@@ -118,11 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
               // Handle space
               const normalizedKey = key.trim();
-              if (
-                normalizedKey === "" ||
-                key === "␣" ||
-                key.toLowerCase() === "space"
-              ) {
+              if (normalizedKey === "" || key === "␣" || key.toLowerCase() === "space") {
                 outputBox.value += " ";
               } else if (normalizedKey.length === 1) {
                 outputBox.value += normalizedKey;
@@ -148,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Draw trail path
     document.addEventListener("mousedown", (e) => {
-      if (e.button === 2) {
+      if (e.button === 2 && (document.title === "SwipeTesting" || document.title === "SwipeTraining")) {
         const outputBox = document.getElementById("text-output");
         outputBox.value = outputBox.value.slice(0, -1);
         currentTrial.backspaceCount++;
@@ -247,9 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${trial.promptPhrase}</td>
         <td>${trial.userInput}</td>
         <td>${trial.totalKeystrokes}</td>
-        <td>${trial.correctCharacters}</td>
-        <td>${trial.incorrectCharacters}</td>
         <td>${trial.characterErrorRate.toFixed(1)}%</td>
+        <td>${trial.accuracy.toFixed(2)}%</td>
         <td>${trial.wordsPerMinute.toFixed(1)}</td>
         <td>${trial.backspaceCount}</td>
         <td>${trial.timeTaken.toFixed(2)}s</td>
@@ -260,7 +240,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Convert trialData array to CSV string/blob
     document.getElementById("downloadCSV").addEventListener("click", () => {
       // Convert array to CSV string
-      const headers = Object.keys(trialData[0]).join(",");
+      const headers =
+          "Trial #,Prompt,User Input,Start Time, End Time,Time Taken (s),Total Keystrokes,Character Error Rate [Edit Distance] (%),Accuracy [Edit Distance] (%),WPM,Backspaces";
       const rows = trialData.map((trial) => Object.values(trial).join(","));
       const csv = [headers, ...rows].join("\n");
 
@@ -276,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// Utility functions
+// **************************** Utility Functions ****************************
 function getNextPhrase() {
   const phraseDisplay = document.getElementById("phrase-display");
   const inputBox = document.getElementById("text-output");
@@ -284,29 +265,25 @@ function getNextPhrase() {
   // Save the current trial
   if (currentTrial && trialNumber > 0) {
     currentTrial.endTrial();
-    currentTrial.userInput = inputBox.value;
+    currentTrial.userInput = inputBox.value.slice(0, -1); // Remove auto-added space at the end
 
     const expected = currentTrial.promptPhrase;
     const actual = currentTrial.userInput;
 
-    let correct = 0,
-      incorrect = 0;
-    for (let i = 0; i < actual.length; i++) {
-      if (actual[i] === expected[i]) correct++;
-      else incorrect++;
-    }
+    // Edit distance is the number of chars that need to be deleted, added, or substituted to make 2 strings match
+    const distance = getEditDistance(actual, expected);
 
-    currentTrial.correctCharacters = correct;
-    currentTrial.incorrectCharacters = incorrect;
-    currentTrial.characterErrorRate = (incorrect / Math.max(actual.length, 1)) * 100;
+    // Calculate Metrics:
+    currentTrial.characterErrorRate = (distance / Math.max(expected.length, 1)) * 100;
     currentTrial.wordsPerMinute = actual.length === 0 ? 0 : (actual.length / 5 / currentTrial.timeTaken) * 60;
+    currentTrial.accuracy = ((expected.length - distance) / expected.length) * 100;
 
+    // Push trial to global list
     trialData.push(currentTrial);
   }
 
   // Check if testing complete
-  if (document.title === "Testing" && trialNumber === TRIAL_COUNT) {
-    console.log(trialData)
+  if ((document.title === "QwertyTesting" || document.title === "SwipeTesting") && trialNumber === TRIAL_COUNT) {
     localStorage.setItem("trialData", JSON.stringify(trialData));
     location.href = "summary.html";
     return;
@@ -316,14 +293,39 @@ function getNextPhrase() {
   currentRandomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
   phraseDisplay.textContent = currentRandomPhrase;
   inputBox.value = "";
-
   currentTrial = new TrialData(++trialNumber, currentRandomPhrase);
 }
 
-// Misc Listeners
+function getEditDistance(a, b) {
+  //a = a.replace(/\s+/g, '');
+  //b = b.replace(/\s+/g, '');
+
+  const dp = Array.from({ length: a.length + 1 }, () =>
+      Array(b.length + 1).fill(0)
+  );
+
+  // For the base case of an empty str and a String, the edit distance will always be the len(String)
+  for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      if (a[i - 1] === b[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i - 1][j - 1], dp[i][j - 1]);
+      }
+    }
+  }
+
+  return dp[a.length][b.length];
+}
+
+
+// **************************** Misc Listeners ****************************
 document.addEventListener("DOMContentLoaded", () => {
-  if (document.title === "Training" || document.title === "Testing") {
-    if (document.title === "Testing") {
+  if (document.title === "QwertyTesting" || document.title === "SwipeTesting" || document.title === "QwertyTraining" || document.title === "SwipeTraining") {
+    if (document.title === "QwertyTesting" || document.title === "SwipeTesting") {
       trialNumber = 0;
       trialData.length = 0; // Clear training data
     }
@@ -332,5 +334,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("contextmenu", (e) => {
-  e.preventDefault();
+  if (document.title === "SwipeTraining" || document.title === "SwipeTesting") {
+    e.preventDefault();
+  }
+});
+
+window.addEventListener("load", () => {
+  if (document.title === "SwipeTraining" || document.title === "SwipeTesting") {
+    return new SimpleKeyboard.default();
+  }
 });
