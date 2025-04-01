@@ -2,7 +2,7 @@
 const SELECTION_DELAY = 175;    // time in ms user must hover over target in order to select it
 const RESELECT_COOLDOWN = 150;  // milliseconds
 const TRAIL_THROTTLE = 15;      // milliseconds
-const TRIAL_COUNT = 5;         // number of total trials
+const TRIAL_COUNT = 15;         // number of total trials
 
 // Data collection for each trial
 let currentTrial = null;
@@ -81,10 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
           // Allow for reselection
           setTimeout(() => {
             const stillInside =
-              parseInt(cursor.style.left) >= bounds.left &&
-              parseInt(cursor.style.left) <= bounds.right &&
-              parseInt(cursor.style.top) >= bounds.top &&
-              parseInt(cursor.style.top) <= bounds.bottom;
+                parseInt(cursor.style.left) >= bounds.left &&
+                parseInt(cursor.style.left) <= bounds.right &&
+                parseInt(cursor.style.top) >= bounds.top &&
+                parseInt(cursor.style.top) <= bounds.bottom;
 
             const lastSelect = keySelectTimestamps.get(button) || 0;
             const now = performance.now();
@@ -150,59 +150,65 @@ document.addEventListener("DOMContentLoaded", () => {
         const cursorX = e.clientX;
         const cursorY = e.clientY;
         setTimeout(() => {
-          if (!isMouseDown) return; // Ignore if mouse released
+          if (!isMouseDown) return;
 
           document.querySelectorAll(".hg-button").forEach((button) => {
             const bounds = button.getBoundingClientRect();
             const isInside =
-              cursorX >= bounds.left &&
-              cursorX <= bounds.right &&
-              cursorY >= bounds.top &&
-              cursorY <= bounds.bottom;
+                cursorX >= bounds.left &&
+                cursorX <= bounds.right &&
+                cursorY >= bounds.top &&
+                cursorY <= bounds.bottom;
 
             if (isInside) {
-              const key = button.innerText.trim();
-              const outputBox = document.getElementById("text-output");
+              const now = performance.now();
+              const lastSelect = keySelectTimestamps.get(button) || 0;
 
-              // Handle input
-              if (key === "" || key === "␣" || key.toLowerCase() === "space") {
-                outputBox.value += " ";
-              } else if (key.length === 1) {
-                outputBox.value += key;
-                currentSwipeWord += key;
+              if (now - lastSelect > RESELECT_COOLDOWN) {
+                keySelectTimestamps.set(button, now); // Update timestamp
+
+                const key = button.innerText.trim();
+                const outputBox = document.getElementById("text-output");
+
+                if (key === "" || key === "␣" || key.toLowerCase() === "space") {
+                  outputBox.value += " ";
+                } else if (key.length === 1) {
+                  outputBox.value += key;
+                  currentSwipeWord += key;
+                  currentTrial.totalKeystrokes++;
+                }
+
+                button.classList.add("selected-confirmed");
+                setTimeout(() => {
+                  button.classList.remove("selected-confirmed");
+                  button.classList.remove("selected");
+                }, 250);
               }
-
-              // Quick flash instead of .hovered
-              button.classList.add("selected-confirmed");
-              setTimeout(() => {
-                button.classList.remove("selected-confirmed");
-                button.classList.remove("selected");
-              }, 250);
             }
           });
-        }, 100); // 100ms dela
-      }
-    });
+        }, 100);
 
-    document.addEventListener("mouseup", () => {
-      hoveredKeys.clear();
-      keySelectTimestamps.clear();
-      isMouseDown = false;
+        document.addEventListener("mouseup", () => {
+          hoveredKeys.clear();
+          keySelectTimestamps.clear();
+          isMouseDown = false;
 
-      if (currentSwipeWord) {
-        const outputBox = document.getElementById("text-output");
-        outputBox.value += " ";
-        currentSwipeWord = "";
-      }
+          if (currentSwipeWord) {
+            const outputBox = document.getElementById("text-output");
+            outputBox.value += " ";
+            currentSwipeWord = "";
+          }
 
-      if (trailFadeTimeout) clearTimeout(trailFadeTimeout);
+          if (trailFadeTimeout) clearTimeout(trailFadeTimeout);
 
-      if (path) {
-        trailFadeTimeout = setTimeout(() => {
-          path.style.transition = "opacity 0.5s ease-out";
-          path.style.opacity = "0";
-          setTimeout(() => path.remove(), 500);
-        }, 150); // Delay a bit after release
+          if (path) {
+            trailFadeTimeout = setTimeout(() => {
+              path.style.transition = "opacity 0.5s ease-out";
+              path.style.opacity = "0";
+              setTimeout(() => path.remove(), 500);
+            }, 150); // Delay a bit after release
+          }
+        });
       }
     });
   }
@@ -250,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "trial_data.csv";
+      a.download = "/trial.csv";
       a.click();
     });
   }
@@ -336,6 +342,15 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("contextmenu", (e) => {
   if (document.title === "SwipeTraining" || document.title === "SwipeTesting") {
     e.preventDefault();
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (document.title === "QwertyTesting") {
+    if (e.key === "Backspace") {
+      currentTrial.backspaceCount++;
+    }
+    currentTrial.totalKeystrokes++;
   }
 });
 
