@@ -1,0 +1,16 @@
+Trial #,Prompt,User Input,Start Time,End Time,Time Taken (s),Total Keystrokes,Character Error Rate [Edit Distance] (%),Accuracy [Edit Distance] (%),WPM,Backspaces
+1,physics and chemistry are hard,physics and chemistry are hard,9000.0,28286.1,19.2861,30,0.0,100.0,25.57,1
+2,time to go shopping,time to go qhopping,28786.1,47525.5,18.7394,19,5.26,94.74,25.81,4
+3,a problem with the engine,a problem with the engine,48025.5,66137.2,18.1117,27,0.0,100.0,25.85,1
+4,circumstances are unacceptable,circumstances are unacceptable,66637.2,85945.0,19.3078,30,0.0,100.0,26.34,4
+5,watch out for low flying objects,watch out for low flying objects,86445.0,105104.6,18.6596,32,0.0,100.0,26.6,3
+6,my bank account is overdrawn,my bank account is overdrawn,105604.6,124606.6,19.002,28,0.0,100.0,25.11,1
+7,three two one zero blast off,three two one zero blast off,125106.6,143438.9,18.3323,29,0.0,100.0,26.69,1
+8,breathing is difficult,breathing is difficult,143938.9,162905.6,18.9667,22,0.0,100.0,26.55,1
+9,if at first you do not succeed,if at first you do not succeed,163405.6,181710.2,18.3046,30,0.0,100.0,26.51,1
+10,we are having spaghetti,we are having spaghetti,182210.2,200325.8,18.1156,23,0.0,100.0,26.31,4
+11,my favorite subject is psychology,my faporite subject is psychology,200825.8,219890.3,19.0645,34,3.03,96.97,26.93,3
+12,never too rich and never too thin,never too rieh and never too thin,220390.3,238602.3,18.212,34,3.03,96.97,26.4,2
+13,I can see the rings on Saturn,I can seeathe rings on Saturn,239102.3,257135.9,18.0336,31,3.45,96.55,26.89,3
+14,please provide your date of birth,zlease provide your date of birth,257635.9,276435.5,18.7996,35,3.03,96.97,26.2,4
+15,elephants are afraid of mice,elephants are afraid of mice,276935.5,294853.4,17.9179,29,0.0,100.0,25.18,1

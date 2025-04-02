@@ -1,0 +1,16 @@
+Trial #,Prompt,User Input,Start Time,End Time,Time Taken (s),Total Keystrokes,Character Error Rate [Edit Distance] (%),Accuracy [Edit Distance] (%),WPM,Backspaces
+1,my bank account is overdrawn,my bank account is overdrawn,100.0,16131.9,16.0319,28,0.0,100.0,23.14379405,7
+2,my favorite subject is psychology,my savarite subject is psychouogy,16132.4,30651.1,14.5187,34,9.09090909,90.90909091,22.77200496,3
+3,watch out for low flying objects,wftch out for low flytng objectq,30651.6,44664.0,14.0124,33,9.375,90.625,21.89520366,4
+4,elections bring out the best,elections bring out the  est,44664.5,59242.3,14.5778,28,3.57142857,96.42857143,21.52786432,3
+5,my watch fell in the water,my watch fell in bhe water,59242.8,73170.7,13.9279,26,3.84615385,96.15384615,21.25520928,3
+6,elephants are afraid of mice,elephasts are afraid of mice,73171.2,88806.8,15.6356,28,3.57142857,96.42857143,21.85253599,3
+7,a problem with the engine,a problemuwith the engine,88807.3,103359.2,14.5519,27,4.0,96.0,23.98877284,6
+8,please provide your date of birth,ptease provide your date of birth,103359.7,117758.0,14.3983,35,3.03030303,96.96969697,21.94946615,3
+9,physics and chemistry are hard,physics and chemistry are hard,117758.5,132320.8,14.5623,31,0.0,100.0,22.58689814,4
+10,three two one zero blast off,three two one zero bqast off,132321.3,148063.6,15.7423,30,3.57142857,96.42857143,23.29446974,5
+11,circumstances are unacceptable,circumstances are unacceptaole,148064.1,162945.8,14.8817,31,3.33333333,96.66666667,23.69418799,5
+12,never too rich and never too thin,never too rich and never too thin,162946.3,177816.1,14.8698,34,0.0,100.0,20.23574641,6
+13,I can see the rings on Saturn,I can see the rings on Saturn,177816.6,191696.5,13.8799,30,0.0,100.0,22.08014668,5
+14,time to go shopping,time to go shopping,191697.0,206094.2,14.3972,19,0.0,100.0,22.29984156,4
+15,if at first you do not succeed,if at first iou do not succeed,206094.7,220214.3,14.1196,31,3.33333333,96.66666667,20.96804503,6

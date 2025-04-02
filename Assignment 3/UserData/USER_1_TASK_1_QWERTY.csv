@@ -1,0 +1,16 @@
+Trial #,Prompt,User Input,Start Time, End Time,Time Taken (s),Total Keystrokes,Character Error Rate [Edit Distance] (%),Accuracy [Edit Distance] (%),WPM,Backspaces
+1,what you see is what you get,what you see is what you ge,292.6,6543.6,6.251,28,3.571428571,96.42857143,51.83170693,0
+2,one heck of a question,one heck of a questio,6544.4,11583,5.0386,22,4.545454545,95.45454545,50.01389275,0
+3,your etiquette needs some work,your etiquette needs some wor,11583.4,20927.6,9.3442,31,3.333333333,96.66666667,37.24235355,3
+4,we dine out on the weekends,we dine out on the weekend,20928,28620.5,7.6925,27,3.703703704,96.2962963,40.55898603,0
+5,I just cannot figure this out,I just cannot figure this ou,28621,34058.5,5.4375,31,3.448275862,96.55172414,61.79310345,0
+6,information super highway,information super hihgwa,34058.7,39740.5,5.6818,27,12,88,50.6881622,0
+7,file all complaints in writing,file all complaints in writin,39740.7,48178.3,8.4376,30,3.333333333,96.66666667,41.24395563,0
+8,February has an extra day,Feburary has an extra da,48178.6,56546.1,8.3675,26,12,88,34.41888258,4
+9,great disturbance in the force,great disturbance in the forc,56546.3,64563.8,8.0175,32,3.333333333,96.66666667,43.40505145,0
+10,we better investigate this,we better investigate thi,64564.1,71285.8,6.7217,25,3.846153846,96.15384615,44.63156642,1
+11,one of the poorest nations,one of the poorest nation,71286,82620.7,11.3347,26,3.846153846,96.15384615,26.46739658,13
+12,I am wearing a tie and a jacket,I am wearing a tie and a jacke,82620.9,90596.9,7.976,0,3.225806452,96.77419355,45.13540622,5
+13,get aboard the ship is leaving,get aboard the ship is leavin,90597.2,101480.4,10.8832,31,3.333333333,96.66666667,31.97588944,14
+14,soon we will return from the city,soon we will return from the cit,101480.6,107535.1,6.0545,35,3.03030303,96.96969697,63.42389958,0
+15,these cookies are so amazing,these cookies are so amazin,107535.5,114858.2,7.3227,29,3.571428571,96.42857143,44.24597485,3

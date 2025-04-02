@@ -1,0 +1,16 @@
+Trial #,Prompt,User Input,Start Time,End Time,Time Taken (s),Total Keystrokes,Character Error Rate [Edit Distance] (%),Accuracy [Edit Distance] (%),WPM,Backspaces
+1,three two one zero blast off,three two one zerk blast off,2000.0,18800.0,16.8,28,3.57,96.43,20.0,1
+2,watch out for low flying objects,watch ouw for low flying obwects,19300.0,34859.2,15.5592,33,6.25,93.75,24.68,1
+3,a problem with the engine,a problem with the engine,35359.2,48728.2,13.369,26,0.0,100.0,22.44,5
+4,never too rich and never too thin,never too rich and never too thin,49228.2,65790.3,16.5621,33,0.0,100.0,23.91,1
+5,elephants are afraid of mice,elephants are afraid of mice,66290.3,79800.6,13.5103,28,0.0,100.0,24.87,2
+6,my favorite subject is psychology,my favorite subject is psychology,80300.6,98138.4,17.8378,34,0.0,100.0,22.2,3
+7,my watch fell in the water,my watcv fell in the watei,98638.4,111239.4,12.601,28,7.69,92.31,24.76,4
+8,circumstances are unacceptable,circumstances ore unacceptable,111739.4,127675.7,15.9363,32,3.33,96.67,22.59,2
+9,elections bring out the best,elections bring out the beyt,128175.7,144183.3,16.0076,31,3.57,96.43,20.99,5
+10,if at first you do not succeed,if at first you do not succeed,144683.3,161999.3,17.316,31,0.0,100.0,20.79,2
+11,we are having spaghetti,we are having spaghetti,162499.3,174299.2,11.7999,25,0.0,100.0,23.39,4
+12,physics and chemistry are hard,physics and chemistry are hard,174799.2,191442.8,16.6436,30,0.0,100.0,21.63,5
+13,breathing is difficult,bheathing is dcfficult,191942.8,203273.3,11.3305,24,9.09,90.91,23.3,4
+14,my bank account is overdrawn,my bqnk account is overdrawn,203773.3,218120.0,14.3467,31,3.57,96.43,23.42,3
+15,please provide your date of birth,please provide your date of birth,218620.0,235147.5,16.5275,35,0.0,100.0,23.96,1

@@ -1,0 +1,16 @@
+Trial #,Prompt,User Input,Start Time,End Time,Time Taken (s),Total Keystrokes,Character Error Rate [Edit Distance] (%),Accuracy [Edit Distance] (%),WPM,Backspaces
+1,elections bring out the best,electians bring out the best,1000.0,17216.2,16.2162,31,3.57,96.43,20.72,2
+2,my watch fell in the water,my watch fell in the water,17716.2,33269.5,15.5533,27,0.0,100.0,20.06,4
+3,never too rich and never too thin,neverotoo rich and never too thin,33769.5,51009.4,17.2399,34,3.03,96.97,22.97,3
+4,if at first you do not succeed,if at first you do not succeed,51509.4,66385.4,14.876,31,0.0,100.0,24.2,1
+5,prevailing wind from the east,prevailing wind from the east,66885.4,81147.7,14.2623,30,0.0,100.0,24.4,2
+6,circumstances are unacceptable,circumstances are unacceptable,81647.7,98549.1,16.9014,30,0.0,100.0,21.3,5
+7,three two one zero blast off,three two one zero olast off,99049.1,114447.8,15.3987,28,3.57,96.43,21.82,2
+8,we are having spaghetti,we are having spaghetti,114947.8,127510.4,12.5626,24,0.0,100.0,21.97,4
+9,a problem with the engine,a problem wivh the engine,128010.4,142068.5,14.0581,25,4.0,96.0,21.34,1
+10,breathing is difficult,breathing is difficult,142568.5,153679.6,11.1111,23,0.0,100.0,23.76,5
+11,I can see the rings on Saturn,I can see the rings on Saturn,154179.6,169701.5,15.5219,29,0.0,100.0,22.42,3
+12,my bank account is overdrawn,my bank accouwt is overdrawn,170201.5,183810.2,13.6087,30,3.57,96.43,24.69,4
+13,elephants are afraid of mice,elephants are afraid of mice,184310.2,197804.2,13.494,30,0.0,100.0,24.9,3
+14,time to go shopping,time to go shoppzng,198304.2,208460.1,10.1559,22,5.26,94.74,22.45,2
+15,please provide your date of birth,please provide your date of birth,208960.1,228525.3,19.5652,33,0.0,100.0,20.24,1

@@ -1,0 +1,16 @@
+Trial #,Prompt,User Input,Start Time,End Time,Time Taken (s),Total Keystrokes,Character Error Rate [Edit Distance] (%),Accuracy [Edit Distance] (%),WPM,Backspaces
+1,if at first you do not succeed,if at first you do not succeed,9000.0,27923.4,18.9234,33,0.0,100.0,19.02,5
+2,breathing is difficult,breathing is diffiyult,28423.4,46060.7,17.6373,25,4.55,95.45,14.97,1
+3,watch out for low flying objects,watcb out for low flying object ,46560.7,62995.9,16.4352,36,6.25,93.75,23.36,3
+4,three two one zero blast off,three two one zero blast off,63495.9,84009.7,20.5138,28,0.0,100.0,16.38,3
+5,physics and chemistry are hard,physics and chemistry are hard,84509.7,102085.2,17.5755,32,0.0,100.0,20.48,3
+6,circumstances are unacceptable,circumstances are unacceptable,102585.2,117566.5,14.9813,30,0.0,100.0,24.03,6
+7,my favorite subject is psychology,ny favorite subjecf is psychology,118066.5,130949.7,12.8832,34,6.06,93.94,30.74,1
+8,time to go shopping,time to go shopping,131449.7,151616.6,20.1669,19,0.0,100.0,11.31,1
+9,prevailing wind from the east,prevailing wind from the east,152116.6,170334.3,18.2177,33,0.0,100.0,19.1,1
+10,we are having spaghetti,we are havinl jpaghetti,170834.3,190387.4,19.5531,25,8.7,91.3,14.12,5
+11,my watch fell in the water,my watch fell in thz water,190887.4,208441.9,17.5545,28,3.85,96.15,17.77,2
+12,please provide your date of birth,please provide your date of birth,208941.9,225906.8,16.9649,35,0.0,100.0,23.34,2
+13,I can see the rings on Saturn,I can iee the rings on Satrrn,226406.8,247291.1,20.8843,29,6.9,93.1,16.66,4
+14,never too rich and never too thin,nlvek tob rich and never too thin,247791.1,267415.9,19.6248,36,9.09,90.91,20.18,3
+15,my bank account is overdrawn,my bank account is overdrawa,267915.9,289164.9,21.249,28,3.57,96.43,15.81,4

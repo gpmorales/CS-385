@@ -1,0 +1,16 @@
+Trial #,Prompt,User Input,Start Time,End Time,Time Taken (s),Total Keystrokes,Character Error Rate [Edit Distance] (%),Accuracy [Edit Distance] (%),WPM,Backspaces
+1,time to go shopping,time to go shopwing,100.0,15503.2,15.4032,19,5.26315789,94.73684211,21.56573999,4
+2,elections bring out the best,elections qring out thr best,15503.7,30389.8,14.8861,30,7.14285714,92.85714286,22.92153109,7
+3,watch out for low flying objects,watch out for low flying objects,30390.3,44691.9,14.3016,34,0.0,100.0,20.90520931,7
+4,a problem with the engine,a problem kith tze engine,44692.4,59588.9,14.8965,27,8.0,92.0,23.35408378,4
+5,three two one zero blast off,three two one zero blast orf,59589.4,75011.4,15.422,28,3.57142857,96.42857143,23.61448958,6
+6,I can see the rings on Saturn,  can see the rings on Saturn,75011.9,89592.6,14.5807,29,3.44827586,96.55172414,21.46779162,3
+7,never too rich and never too thin,never too rich andynever too toin,89593.1,104114.3,14.5212,34,6.06060606,93.93939394,21.85691074,5
+8,circumstances are unacceptable,circumstanceh are unaiceptable,104114.8,118989.0,14.8742,31,6.66666667,93.33333333,21.75281074,4
+9,my bank account is overdrawn,my bank account is ovsrdrawa,118989.5,134094.4,15.1049,28,7.14285714,92.85714286,23.53731052,5
+10,breathing is difficult,breathing is difficult,134094.9,148616.5,14.5216,24,0.0,100.0,20.38862592,3
+11,prevailing wind from the east,prevailing wind from the easq,148617.0,164019.4,15.4024,29,3.44827586,96.55172414,23.50885702,4
+12,we are having spaghetti,we are having spaghetti,164019.9,178341.0,14.3211,25,0.0,100.0,23.53816172,3
+13,my watch fell in the water,my watch fell in the water,178341.5,193855.2,15.5137,28,0.0,100.0,23.13151494,3
+14,please provide your date of birth,please provide your date of birth,193855.7,208397.5,14.5418,35,0.0,100.0,23.90557619,3
+15,my favorite subject is psychology,my havorite subeect is psychology,208398.0,223178.1,14.7801,35,6.06060606,93.93939394,22.08627277,5

@@ -1,0 +1,16 @@
+Trial #,Prompt,User Input,Start Time,End Time,Time Taken (s),Total Keystrokes,Character Error Rate [Edit Distance] (%),Accuracy [Edit Distance] (%),WPM,Backspaces
+1,my favorite subject is psychology,my favorite subject is psychology,1000.0,18856.0,17.856,35,0.0,100.0,22.18,3
+2,I can see the rings on Saturn,I can see the rings onwSaturn,19356.0,37121.2,17.7652,32,3.45,96.55,19.59,0
+3,watch out for low flying objects,watch out for low flying objects,37621.2,54873.2,17.252,34,0.0,100.0,22.26,0
+4,my bank account is overdrawn,my bank account is overdrawn,55373.2,75314.9,19.9417,30,0.0,100.0,16.85,1
+5,prevailing wind from the east,prevailini wind from the east,75814.9,93374.0,17.5591,32,3.45,96.55,19.82,5
+6,a problem with the engine,a problem with the engine,93874.0,108456.6,14.5826,26,0.0,100.0,20.57,3
+7,my watch fell in the water,my wasch fell in the water,108956.6,123277.7,14.3211,26,3.85,96.15,21.79,4
+8,physics and chemistry are hard,physics and chemistry are hard,123777.7,146003.9,22.2262,30,0.0,100.0,16.2,2
+9,elections bring out the best,elections bring out the best,146503.9,162592.4,16.0885,30,0.0,100.0,20.88,5
+10,elephants are afraid of mice,elephants are afraid of mice,163092.4,181969.2,18.8768,29,0.0,100.0,17.8,0
+11,three two one zero blast off,three two one zero blast off,182469.2,199084.2,16.615,30,0.0,100.0,20.22,3
+12,breathing is difficult,breathing ns difficult,199584.2,215093.9,15.5097,23,4.55,95.45,17.02,4
+13,never too rich and never too thin,never too rich and never too thin,215593.9,235504.4,19.9105,33,0.0,100.0,19.89,2
+14,please provide your date of birth,please provide your date of birth,236004.4,255882.1,19.8777,34,0.0,100.0,19.92,5
+15,we are having spaghetti,we are having spaghetti,256382.1,278718.5,22.3364,26,0.0,100.0,12.36,3
