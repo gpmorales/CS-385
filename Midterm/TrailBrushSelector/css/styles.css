@@ -65,7 +65,7 @@ body {
     height: 630px;
     border: 1px solid black;
     left: 50%;
-    top: 125px; /* Adjust as needed */
+    top: 125px;
     transform: translateX(-50%)
 }
 
