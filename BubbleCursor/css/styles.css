@@ -1,0 +1,101 @@
+.img {
+    z-index: 1;
+}
+
+.target {
+    width: 50px;
+    height: 50px;
+    background: grey;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.active {
+    background: red;
+}
+
+#instructions {
+    position: absolute;
+    top: 5%;
+    left: 20%;
+}
+
+body {
+    user-select: none;
+}
+
+
+/* Custom cursor styles */
+#custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    display: none;
+}
+
+/* Horizontal line */
+#custom-cursor::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    transform: translateY(-50%);
+}
+
+/* Vertical line */
+#custom-cursor::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background-color: black;
+    transform: translateX(-50%);
+}
+
+/* Blue outer snapping bubble */
+#bubble-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0px;
+    height: 0px;
+    background: rgba(29, 102, 197, 0.2);
+    border: 2px solid rgba(29, 102, 197, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: width 0.05s ease-out, height 0.05s ease-out;
+}
+
+
+
+/* Canvas & rectangle target styles */
+#demo-area {
+    position: fixed;
+    width: 1200px;
+    height: 630px;
+    border: 1px solid black;
+    left: 50%;
+    top: 125px;
+    transform: translateX(-50%)
+}
+
+.random-target {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(147, 159, 159, 0.85);
+    border: 1px solid black;
+}
+
+.highlighted {
+    border: 3px solid limegreen !important;
+}
