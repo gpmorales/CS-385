@@ -22,21 +22,20 @@
             </div>
         </div>
 
-        <div id="custom-cursor">
-            <div id="bubble-ring"></div>
-        </div>
-
         <div id="demo-area"
-             style="margin-top: 50px; margin-left: -85px; height: 500px !important; width: 1000px !important;"></div>
+             style="margin-top: 50px; margin-left: -85px; height: 530px !important; width: 1050px !important;"></div>
 
         <button id="next-trial-btn" class="btn btn-primary"
                 onclick="location.href='testing.html'"
                 style="position: fixed; left: calc(50% + 470px); top: calc(425px); transform: translateY(-50%); z-index: 1000;">Start Trials</button>
 
         <button id="generate-targets-btn" class="btn btn-secondary"
-                onclick="generateRandomRectangles('demo-area', { width: 800, height: 500 });"
+                onclick="generateRandomTargets('demo-area', { height: 530, width: 1050 });"
                 style="position: fixed; left: calc(50% + 470px); top: calc(375px); transform: translateY(-50%); z-index: 1000;">Generate New Targets</button>
 
-        <svg id="cursor-trail-svg" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></svg>
+        <svg id="bubble-pull-visual" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;">
+            <path id="pull-curve" d="" />
+        </svg>
+
     </body>
 </html>

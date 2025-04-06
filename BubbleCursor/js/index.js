@@ -1,7 +1,10 @@
 // Global Variables and Constants
-let TARGET_COUNT = Math.floor(Math.random() * 4) + 3;           // Random between 3-6
-let TOTAL_ITEM_COUNT = Math.floor(Math.random() * 6) + 10;      // Random between 10-15
-const TRIAL_COUNT = 15;                                            // Number of total trials
+let TARGET_COUNT = Math.floor(Math.random() * 4) + 3;
+let TOTAL_ITEM_COUNT = Math.floor(Math.random() * 7) + 10;
+const TRIAL_COUNT = 15;
+
+let CURRENT_TARGETS = [];   // { element, x, y, radius }
+let HIGHLIGHTED_TARGET = null;
 
 // Data collection for each trial
 let trialData = [];
@@ -32,7 +35,6 @@ class TrialData {
 document.addEventListener("DOMContentLoaded", () => {
     // Create custom brush, trail logic, and more
     if (document.title === "Training") {
-
         let confirmedSelections = new Set(); // Track finalized selections
 
         // Create custom cursor
@@ -58,51 +60,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     document.documentElement.style.cursor = ""; // Restore default cursor
                     cursor.style.display = "none"; // Hide custom cursor
+                    // Clear any highlighted targets or paths
+                    const path = document.getElementById("pull-curve");
+                    path.remove()
+                    HIGHLIGHTED_TARGET.classList.remove("highlighted");
                 }
             }
         });
 
-        // Update the trail and target selection
+        // Update the bubble size and target selection
         document.addEventListener("mousemove", (e) => {
+            if (!isCustomCursorActive) return;
             const x = e.clientX;
             const y = e.clientY;
-
             cursor.style.left = `${e.clientX}px`;
             cursor.style.top = `${e.clientY}px`;
 
-            const radius = getDistanceToNearestTarget(x, y);
+            const radius = Math.max(20, getDistanceToNearestTarget(x, y));
             bubbleRing.style.width = `${radius * 2}px`;
             bubbleRing.style.height = `${radius * 2}px`;
-
-            document.querySelectorAll(".random-target").forEach(rect => {
-            });
         });
 
-        // Draw trail path
+        // Add the closest element to list
         document.addEventListener("mousedown", (e) => {
             if (e.button === 0 && isCustomCursorActive) {
             }
         });
-
-        // Right-click to deselect a selected item if the custom cursor is still active
-        document.addEventListener("contextmenu", (e) => {
-            if (isCustomCursorActive) {
-                e.preventDefault(); // Prevent default right-click menu
-                const target = document.elementFromPoint(e.clientX, e.clientY);
-                if (target && target.classList.contains("random-target")) {
-                    if (confirmedSelections.has(target)) {
-                        target.classList.remove("highlighted"); // Remove highlight
-                        confirmedSelections.delete(target); // Properly remove from confirmed selections
-                    }
-                }
-            }
-        });
-
-
-        // Prevent unwanted deselection when the brush is inactive
-        document.addEventListener("mouseleave", () => {
-        });
-
     }
 });
 
@@ -113,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.title === "Testing") {
         // Begin trial
         let currentTrial = new TrialData(trialData.length + 1, TARGET_COUNT, TOTAL_ITEM_COUNT);
+        let confirmedSelections = new Set(); // Track finalized selections
 
         // IMPORTANT: Handle Next Trial and Finish
         document.getElementById("next-trial-btn").addEventListener("click", () => {
@@ -146,32 +130,175 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "/html/summary.html";
         });
 
+        // Create custom cursor
+        const cursor = document.createElement("div");
+        cursor.id = "custom-cursor";
 
-        // Prevent unwanted deselection when the brush is inactive
-        document.addEventListener("mouseleave", () => {
+        // Create bubble ring and append inside cursor
+        const bubbleRing = document.createElement("div");
+        bubbleRing.id = "bubble-ring";
+        cursor.appendChild(bubbleRing);
+        document.body.appendChild(cursor);
+
+        // Toggle logic for custom cursor
+        let isCustomCursorActive = false; // Tracks if cursor is active
+
+        // Toggle custom cursor when Ctrl is pressed (latch on/off)
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Control") {
+                isCustomCursorActive = !isCustomCursorActive; // Toggle state
+                if (isCustomCursorActive) {
+                    document.documentElement.style.cursor = "none"; // Hide default cursor
+                    cursor.style.display = "block"; // Show custom cursor
+                } else {
+                    document.documentElement.style.cursor = ""; // Restore default cursor
+                    cursor.style.display = "none"; // Hide custom cursor
+                    // Clear any highlighted targets or paths
+                    const path = document.getElementById("pull-curve");
+                    path.remove()
+                    HIGHLIGHTED_TARGET.classList.remove("highlighted");
+                }
+            }
+        });
+
+        // Update the bubble size and target selection
+        document.addEventListener("mousemove", (e) => {
+            if (!isCustomCursorActive) return;
+            const x = e.clientX;
+            const y = e.clientY;
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+
+            const radius = Math.max(20, getDistanceToNearestTarget(x, y));
+            bubbleRing.style.width = `${radius * 2}px`;
+            bubbleRing.style.height = `${radius * 2}px`;
+        });
+
+        // Add the closest element to list
+        document.addEventListener("mousedown", (e) => {
+            if (e.button === 0 && isCustomCursorActive) {
+            }
         });
     }
 });
 
 
-// Generate Random targets
+// Utility functions:
+function getDistanceToNearestTarget(cursorX, cursorY) {
+    const demoArea = document.getElementById("demo-area");
+    const demoRect = demoArea.getBoundingClientRect();
+
+    // Convert mouse position to be relative to #demo-area
+    const localX = cursorX - demoRect.left;
+    const localY = cursorY - demoRect.top;
+
+    if (CURRENT_TARGETS.length === 0) return 0;
+
+    let closest = null;
+    let closestCenterDist = Infinity;
+
+    CURRENT_TARGETS.forEach(target => {
+        const dx = target.x - localX;
+        const dy = target.y - localY;
+        const centerDist = Math.sqrt(dx * dx + dy * dy);
+
+        if (centerDist < closestCenterDist) {
+            closest = target;
+            closestCenterDist = centerDist;
+        }
+    });
+
+    if (!closest) return 0;
+
+    // Highlight it (ONLY this one)
+    if (HIGHLIGHTED_TARGET && HIGHLIGHTED_TARGET !== closest.element) {
+        HIGHLIGHTED_TARGET.classList.remove("highlighted");
+    }
+
+    closest.element.classList.add("highlighted");
+    HIGHLIGHTED_TARGET = closest.element;
+
+    // Optional accessibility guide curve
+    const path = document.getElementById("pull-curve");
+
+    if (HIGHLIGHTED_TARGET) {
+        const targetRect = HIGHLIGHTED_TARGET.getBoundingClientRect();
+        const targetCenterX = targetRect.left + targetRect.width / 2;
+        const targetCenterY = targetRect.top + targetRect.height / 2;
+
+        const bubbleCenterX = cursorX;
+        const bubbleCenterY = cursorY;
+
+        const dx = targetCenterX - bubbleCenterX;
+        const dy = targetCenterY - bubbleCenterY;
+
+        // Adjust how dramatic the curve is
+        const controlX = bubbleCenterX + dx * 0.5 + dy * 0.4;
+        const controlY = bubbleCenterY - 10;
+
+        const curvePath = `M ${bubbleCenterX},${bubbleCenterY} Q ${controlX},${controlY} ${targetCenterX},${targetCenterY}`;
+        path.setAttribute("d", curvePath);
+        path.style.display = "block";
+    } else {
+        path.setAttribute("d", "");
+        path.style.display = "none";
+    }
+
+    // Bubble grows to edge
+    return Math.max(0, closestCenterDist - closest.radius);
+}
+
+
+// Generate Random Circle Targets
 function generateRandomTargets(containerId, bounds) {
     const container = document.getElementById(containerId);
 
-    // Clear existing random targets first
-    const targets = container.querySelectorAll('.random-target');
-    targets.forEach(target => target.remove());
+    // Clear existing targets
+    container.querySelectorAll('.random-target').forEach(t => t.remove());
 
-    for (let i = 0; i < TOTAL_ITEM_COUNT; i++) {
-        // Generate random position within bounds
-        const target = document.createElement("div");
-        target.className = "random-target";
-        const x = Math.random() * (bounds.width - 50); // 50 is the rectangle width
-        const y = Math.random() * (bounds.height - 50); // 50 is the rectangle height
-        target.style.left = `${x}px`;
-        target.style.top = `${y}px`;
-        if (i < TARGET_COUNT) target.style.backgroundColor = "yellow"; // 3-5 required
-        container.appendChild(target);
+    // Reset for each trial
+    CURRENT_TARGETS = [];
+    let attempts = 0;
+    const minRadius = 20;
+    const maxRadius = 35;
+
+    while (CURRENT_TARGETS.length < TOTAL_ITEM_COUNT && attempts < 10000) {
+        const radius = Math.random() * (maxRadius - minRadius) + minRadius;
+        const x = Math.random() * ((bounds.width - 20) - radius * 2);
+        const y = Math.random() * ((bounds.height - 20) - radius * 2);
+        const centerX = x + radius;
+        const centerY = y + radius;
+
+        // Check for overlap with existing targets
+        const overlaps = CURRENT_TARGETS.some(t => {
+            const dx = t.x - centerX;
+            const dy = t.y - centerY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            return distance < radius * 2 + 5; // add 5 padding in between circles
+        });
+
+        // Add non overlapping target
+        if (!overlaps) {
+            const target = document.createElement("div");
+            target.className = "random-target";
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
+            target.style.width = `${radius * 2}px`;
+            target.style.height = `${radius * 2}px`;
+
+            if (CURRENT_TARGETS.length <= TARGET_COUNT) {
+                target.style.backgroundColor = "limegreen";
+            }
+            container.appendChild(target);
+
+            // Add this to current targets
+            CURRENT_TARGETS.push({ element: target, x: centerX, y: centerY, radius });
+        }
+        attempts++;
+    }
+
+    if (attempts >= 10000) {
+        console.warn("Could not place all targets without overlap.");
     }
 }
 
@@ -235,10 +362,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-
-// Utility functions:
-function getDistanceToNearestTarget(cursorX, cursorY) {
-    // TODO: Replace with real distance to nearest target
-    return Math.random() * 100 + 30; // temp: 30–130 px
-}
