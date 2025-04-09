@@ -5,22 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="193a8a38-5c26-45d9-b417-867ad5ee01c5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/.idea/BubbleCursor.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/css/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/html/instructions.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/html/introduction.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/html/summary.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/html/testing.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/html/training.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/js/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/media/bubble_cursor.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BubbleCursor/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/testing.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/testing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +93,7 @@
       <workItem from="1743966094325" duration="238000" />
       <workItem from="1743966394148" duration="4316000" />
       <workItem from="1743970782921" duration="9493000" />
-      <workItem from="1744159910263" duration="640000" />
+      <workItem from="1744159910263" duration="7449000" />
     </task>
     <servers />
   </component>

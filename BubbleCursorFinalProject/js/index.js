@@ -1,12 +1,11 @@
 // Global Variables and Constants
-let TARGET_COUNT = Math.floor(Math.random() * 4) + 3;
-let TOTAL_ITEM_COUNT = Math.floor(Math.random() * 7) + 10;
 const TRIAL_COUNT = 15;
 
-let CURRENT_TARGETS = new Set();       // { element, x-coord, y-coord, radius }
-let FINAL_SELECTIONS = new Set();      // { element, x-coord, y-coord, radius }
-
-let HIGHLIGHTED_TARGET = null;
+let ITEM_SET = new Map();               // Map<id, obj>
+let TARGET_SET = new Map();             // Map<id, obj>
+let SELECTION_SET = new Map();          // Map<id, obj>
+let DESELECTION_SET = new Map();        // Map<id, obj>
+let HIGHLIGHTED_TARGET = null;    // Store the current closest item object
 
 // Data collection for each trial
 let trialData = [];
@@ -19,18 +18,12 @@ class TrialData {
         this.startTime = performance.now();              // Trial start time
         this.endTime = null;                             // Trial end time
         this.timeTaken = null;                           // Duration in seconds
-
-        // Selection stats
-        this.totalSelections = 0;
-        this.correctSelections = 0;
-        this.incorrectSelections = 0;
-
-        // Deselection tracking
-        this.deselectedTargets = 0;
-        this.deselectedNonTargets = 0;
-
-        // Cursor movement tracking
-        this.totalCursorDistance = 0; // Sum of movement in pixels
+        this.totalSelections = 0;                        // Total selection made
+        this.correctSelections = 0;                      // Correct selections made
+        this.incorrectSelections = 0;                    // Incorrect selections made
+        this.deselectedTargets = 0;                      // Number of targets deselected
+        this.deselectedNonTargets = 0;                   // Number of non-targets deselected
+        this.totalCursorDistance = 0;                    // Sum of movement in pixels
     }
 
     endTrial() {
@@ -40,12 +33,10 @@ class TrialData {
 }
 
 
-
 // **************************** Training Page Event Listener ****************************
 document.addEventListener("DOMContentLoaded", () => {
     // Create custom brush, trail logic, and more
     if (document.title === "Training") {
-        let confirmedSelections = new Set(); // Track finalized selections
 
         // Create custom cursor
         const cursor = document.createElement("div");
@@ -71,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.documentElement.style.cursor = ""; // Restore default cursor
                     cursor.style.display = "none"; // Hide custom cursor
                     // Clear any highlighted targets or paths
-                    HIGHLIGHTED_TARGET.classList.remove("highlighted");
+                    HIGHLIGHTED_TARGET.element.classList.remove("highlighted");
                     const path = document.getElementById("pull-curve");
                     path.style.display = "none";
                 }
@@ -94,6 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // Add the closest element to list
         document.addEventListener("mousedown", (e) => {
             if (e.button === 0 && isCustomCursorActive) {
+                if (!HIGHLIGHTED_TARGET.element.classList.contains("selected")) {
+                    HIGHLIGHTED_TARGET.element.classList.add("selected");
+                } else {
+                    HIGHLIGHTED_TARGET.element.classList.remove("selected");
+                }
             }
         });
     }
@@ -104,9 +100,9 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
     // Create custom brush, trail logic, and more
     if (document.title === "Testing") {
-        // Begin trial
-        let currentTrial = new TrialData(trialData.length + 1, TARGET_COUNT, TOTAL_ITEM_COUNT);
-        let confirmedSelections = new Set(); // Track finalized selections
+        // Generate first trial setup and record correct counts
+        generateRandomTargets("demo-area", { width: 1200, height: 600 });
+        let currentTrial = new TrialData(trialData.length + 1, TARGET_SET.size, ITEM_SET.size);
 
         // IMPORTANT: Handle Next Trial and Finish
         document.getElementById("next-trial-btn").addEventListener("click", () => {
@@ -119,17 +115,37 @@ document.addEventListener("DOMContentLoaded", () => {
                 finishButton.removeAttribute('hidden');
             }
 
-            // Reset targets and params
-            TARGET_COUNT = Math.floor(Math.random() * 4) + 3; // Random between 3-6
-            TOTAL_ITEM_COUNT = Math.floor(Math.random() * 6) + 10; // Random between 10-15
-            generateRandomTargets("demo-area", { width: 1200, height: 600 });
+            // Analyze the metrics and data for this trial
+            let correctSelections = 0;
+            let incorrectSelections = 0;
+            let deselectedTargets = 0;
+            let deselectedNonTargets = 0;
 
-            // Record this trial
+            // Count correct/incorrect selections
+            SELECTION_SET.forEach((item, id) => {
+                if (TARGET_SET.has(id)) correctSelections++;
+                else incorrectSelections++;
+            });
+
+            // Count de-selections (previously selected, now not in final set)
+            DESELECTION_SET.forEach((item, id) => {
+                if (TARGET_SET.has(id)) deselectedTargets++;
+                else deselectedNonTargets++;
+            });
+
+            // Store data in trial object
+            currentTrial.totalSelections = SELECTION_SET.size;
+            currentTrial.correctSelections = correctSelections;
+            currentTrial.incorrectSelections = incorrectSelections;
+            currentTrial.deselectedTargets = deselectedTargets;
+            currentTrial.deselectedNonTargets = deselectedNonTargets;
+
+            // Prepare new trial by resetting targets and params
             currentTrial.endTrial()
             trialData.push(currentTrial);
-
-            // Prepare new trial
-            currentTrial = new TrialData(trialData.length + 1, TARGET_COUNT, TOTAL_ITEM_COUNT);
+            console.log(currentTrial)
+            generateRandomTargets("demo-area", { width: 1200, height: 600 });
+            currentTrial = new TrialData(trialData.length + 1, TARGET_SET.size, ITEM_SET.size);
         });
 
         document.getElementById("finish-btn").addEventListener("click", () => {
@@ -164,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.documentElement.style.cursor = ""; // Restore default cursor
                     cursor.style.display = "none"; // Hide custom cursor
                     // Clear any highlighted targets or paths
-                    HIGHLIGHTED_TARGET.classList.remove("highlighted");
+                    HIGHLIGHTED_TARGET.element.classList.remove("highlighted");
                     const path = document.getElementById("pull-curve");
                     path.style.display = "none";
                 }
@@ -184,9 +200,18 @@ document.addEventListener("DOMContentLoaded", () => {
             bubbleRing.style.height = `${radius * 2}px`;
         });
 
-        // Add the closest element to list
+        // Select the highlighted element and add it to selection list
         document.addEventListener("mousedown", (e) => {
             if (e.button === 0 && isCustomCursorActive) {
+                const id = HIGHLIGHTED_TARGET.id
+                if (!HIGHLIGHTED_TARGET.element.classList.contains("selected")) {
+                    HIGHLIGHTED_TARGET.element.classList.add("selected");
+                    SELECTION_SET.set(id, HIGHLIGHTED_TARGET);
+                } else {
+                    SELECTION_SET.delete(id);
+                    DESELECTION_SET.set(id, HIGHLIGHTED_TARGET);
+                    HIGHLIGHTED_TARGET.element.classList.remove("selected");
+                }
             }
         });
     }
@@ -202,37 +227,43 @@ function getDistanceToNearestTarget(cursorX, cursorY) {
     const localX = cursorX - demoRect.left;
     const localY = cursorY - demoRect.top;
 
-    if (CURRENT_TARGETS.length === 0) return 0;
+    if (ITEM_SET.length === 0) return 0;
 
     let closest = null;
+    let closestId = null;
     let closestCenterDist = Infinity;
 
-    CURRENT_TARGETS.forEach(target => {
-        const dx = target.x - localX;
-        const dy = target.y - localY;
+    // Find the closest item by center distance
+    ITEM_SET.forEach((item, id) => {
+        const dx = item.x - localX;
+        const dy = item.y - localY;
         const centerDist = Math.sqrt(dx * dx + dy * dy);
 
         if (centerDist < closestCenterDist) {
-            closest = target;
+            closest = item;
+            closestId = id;
             closestCenterDist = centerDist;
         }
     });
 
     if (!closest) return 0;
 
-    // Highlight it (ONLY this one)
-    if (HIGHLIGHTED_TARGET && HIGHLIGHTED_TARGET !== closest.element) {
-        HIGHLIGHTED_TARGET.classList.remove("highlighted");
+    // Remove highlight if different from current
+    if (HIGHLIGHTED_TARGET && HIGHLIGHTED_TARGET.id !== closestId) {
+        HIGHLIGHTED_TARGET.element.classList.remove("highlighted");
     }
 
+    // Highlight the new target
     closest.element.classList.add("highlighted");
-    HIGHLIGHTED_TARGET = closest.element;
+
+    // Save the whole object + ID for later use
+    HIGHLIGHTED_TARGET = { id: closestId, ...closest };
 
     // Optional accessibility guide curve
     const path = document.getElementById("pull-curve");
 
     if (HIGHLIGHTED_TARGET) {
-        const targetRect = HIGHLIGHTED_TARGET.getBoundingClientRect();
+        const targetRect = HIGHLIGHTED_TARGET.element.getBoundingClientRect();
         const targetCenterX = targetRect.left + targetRect.width / 2;
         const targetCenterY = targetRect.top + targetRect.height / 2;
         const bubbleCenterX = cursorX;
@@ -264,13 +295,21 @@ function generateRandomTargets(containerId, bounds) {
     // Clear existing targets
     container.querySelectorAll('.random-target').forEach(t => t.remove());
 
-    // Reset for each trial
-    CURRENT_TARGETS = [];
+    // Reset all data for each trial
+    ITEM_SET.clear() ;
+    TARGET_SET.clear();
+    SELECTION_SET.clear();
+    DESELECTION_SET.clear();
+
+    const targetCount = Math.floor(Math.random() * 4) + 3; // Random between 3-6
+    const totalItemCount = Math.floor(Math.random() * 6) + 10; // Random between 10-15
+
     let attempts = 0;
     const minRadius = 20;
     const maxRadius = 35;
 
-    while (CURRENT_TARGETS.length < TOTAL_ITEM_COUNT && attempts < 10000) {
+    let id = 0;
+    while (ITEM_SET.size < totalItemCount && attempts < 10000) {
         const radius = Math.random() * (maxRadius - minRadius) + minRadius;
         const x = Math.random() * ((bounds.width - 20) - radius * 2);
         const y = Math.random() * ((bounds.height - 20) - radius * 2);
@@ -278,14 +317,14 @@ function generateRandomTargets(containerId, bounds) {
         const centerY = y + radius;
 
         // Check for overlap with existing targets
-        const overlaps = CURRENT_TARGETS.some(t => {
+        const overlaps = Array.from(ITEM_SET.values()).some(t => {
             const dx = t.x - centerX;
             const dy = t.y - centerY;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            return distance < radius * 2 + 5; // add 5 padding in between circles
+            return distance < radius * 2 + 5;
         });
 
-        // Add non overlapping target
+        // Add non overlapping item
         if (!overlaps) {
             const target = document.createElement("div");
             target.className = "random-target";
@@ -294,14 +333,19 @@ function generateRandomTargets(containerId, bounds) {
             target.style.width = `${radius * 2}px`;
             target.style.height = `${radius * 2}px`;
 
-            if (CURRENT_TARGETS.length <= TARGET_COUNT) {
+            // Add this item to target set
+            if (TARGET_SET.size < targetCount) {
                 target.style.backgroundColor = "limegreen";
+                TARGET_SET.set(id, { element: target, x: centerX, y: centerY, radius });
             }
-            container.appendChild(target);
 
-            // Add this to current targets
-            CURRENT_TARGETS.push({ element: target, x: centerX, y: centerY, radius });
+            // Add item to main set
+            ITEM_SET.set(id, { element: target, x: centerX, y: centerY, radius });
+            container.appendChild(target);
         }
+
+        // Update attempts and id values
+        id++;
         attempts++;
     }
 
@@ -313,9 +357,6 @@ function generateRandomTargets(containerId, bounds) {
 
 // Load demo area
 document.addEventListener("DOMContentLoaded", () => {
-    if (document.title === "Testing") {
-        generateRandomTargets("demo-area", { width: 1200, height: 600 });
-    }
     if (document.title === "Training") {
         generateRandomTargets("demo-area", { width: 800, height: 500 });
     }
@@ -335,6 +376,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         trialData.forEach(trial => {
+            const deselectRatio = trial.totalSelections > 0
+                ? ((trial.deselectedTargets + trial.deselectedNonTargets) / trial.totalSelections * 100).toFixed(1) + "%"
+                : "—";
+            const targetDeselectRatio = trial.correctSelections > 0
+                ? (trial.deselectedTargets / trial.correctSelections * 100).toFixed(1) + "%"
+                : "—";
+            const accuracy = trial.targetCount > 0
+                ? ((trial.correctSelections / trial.targetCount) * 100).toFixed(1) + "%"
+                : "—";
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${trial.trialNumber}</td>
@@ -345,9 +396,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${trial.deselectedTargets}</td>
                 <td>${trial.deselectedNonTargets}</td>
                 <td>${trial.timeTaken.toFixed(2)}</td>
-                <td>${((trial.deselectedTargets + trial.deselectedNonTargets) / trial.totalSelections * 100).toFixed(1)}%</td>
-                <td>${(trial.deselectedTargets / trial.correctSelections * 100).toFixed(1)}%</td>
-                <td>${((trial.correctSelections / trial.targetCount) * 100).toFixed(1)}%</td>
+                <td>${Math.round(trial.totalCursorDistance)}</td>
+                <td>${deselectRatio}</td>
+                <td>${targetDeselectRatio}</td>
+                <td>${accuracy}</td>
                 <td>${trial.incorrectSelections === 0 ? '✓' : '✗'}</td>
             `;
             tableBody.appendChild(row);

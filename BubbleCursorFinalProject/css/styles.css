@@ -84,6 +84,12 @@ body {
     transition: box-shadow 0.1s ease;
 }
 
+.random-target.selected {
+    box-shadow: 0 0 0 4px rgba(255, 255, 0, 0.8); /* Yellow glow */
+    border: 3px solid yellow;
+}
+
+
 #pull-curve {
     stroke: rgba(29, 102, 197, 0.4);
     stroke-width: 3;
