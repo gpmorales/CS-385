@@ -3,7 +3,9 @@ let TARGET_COUNT = Math.floor(Math.random() * 4) + 3;
 let TOTAL_ITEM_COUNT = Math.floor(Math.random() * 7) + 10;
 const TRIAL_COUNT = 15;
 
-let CURRENT_TARGETS = [];   // { element, x, y, radius }
+let CURRENT_TARGETS = new Set();       // { element, x-coord, y-coord, radius }
+let FINAL_SELECTIONS = new Set();      // { element, x-coord, y-coord, radius }
+
 let HIGHLIGHTED_TARGET = null;
 
 // Data collection for each trial
@@ -11,24 +13,32 @@ let trialData = [];
 
 class TrialData {
     constructor(trialNumber, targetCount, totalItemCount) {
-        this.trialNumber = trialNumber; // Trial number
-        this.totalItemCount = totalItemCount; // Total selectable items (targets + distractors)
-        this.targetCount = targetCount; // Number of required targets
-        this.startTime = performance.now(); // Trial start time
-        this.endTime = null; // Trial end time
-        this.timeTaken = null; // Total duration of the trial
-        this.totalSelections = 0; // Total number of selected items
-        this.correctSelections = 0; // Number of correctly selected required targets
-        this.incorrectSelections = 0; // Number of incorrectly selected non-targets
-        this.deselectedTargets = 0; // Number of required targets that were deselected
-        this.deselectedNonTargets = 0; // Number of non-targets that were deselected
+        this.trialNumber = trialNumber;                  // Trial number
+        this.totalItemCount = totalItemCount;            // Total items on screen
+        this.targetCount = targetCount;                  // Number of required targets
+        this.startTime = performance.now();              // Trial start time
+        this.endTime = null;                             // Trial end time
+        this.timeTaken = null;                           // Duration in seconds
+
+        // Selection stats
+        this.totalSelections = 0;
+        this.correctSelections = 0;
+        this.incorrectSelections = 0;
+
+        // Deselection tracking
+        this.deselectedTargets = 0;
+        this.deselectedNonTargets = 0;
+
+        // Cursor movement tracking
+        this.totalCursorDistance = 0; // Sum of movement in pixels
     }
 
     endTrial() {
         this.endTime = performance.now();
-        this.timeTaken = (this.endTime - this.startTime) / 1000; // Convert to seconds
+        this.timeTaken = (this.endTime - this.startTime) / 1000;
     }
 }
+
 
 
 // **************************** Training Page Event Listener ****************************
@@ -61,9 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.documentElement.style.cursor = ""; // Restore default cursor
                     cursor.style.display = "none"; // Hide custom cursor
                     // Clear any highlighted targets or paths
-                    const path = document.getElementById("pull-curve");
-                    path.remove()
                     HIGHLIGHTED_TARGET.classList.remove("highlighted");
+                    const path = document.getElementById("pull-curve");
+                    path.style.display = "none";
                 }
             }
         });
@@ -154,9 +164,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.documentElement.style.cursor = ""; // Restore default cursor
                     cursor.style.display = "none"; // Hide custom cursor
                     // Clear any highlighted targets or paths
-                    const path = document.getElementById("pull-curve");
-                    path.remove()
                     HIGHLIGHTED_TARGET.classList.remove("highlighted");
+                    const path = document.getElementById("pull-curve");
+                    path.style.display = "none";
                 }
             }
         });
@@ -225,14 +235,12 @@ function getDistanceToNearestTarget(cursorX, cursorY) {
         const targetRect = HIGHLIGHTED_TARGET.getBoundingClientRect();
         const targetCenterX = targetRect.left + targetRect.width / 2;
         const targetCenterY = targetRect.top + targetRect.height / 2;
-
         const bubbleCenterX = cursorX;
         const bubbleCenterY = cursorY;
-
         const dx = targetCenterX - bubbleCenterX;
         const dy = targetCenterY - bubbleCenterY;
 
-        // Adjust how dramatic the curve is
+        // Adjust the curve
         const controlX = bubbleCenterX + dx * 0.5 + dy * 0.4;
         const controlY = bubbleCenterY - 10;
 
@@ -244,7 +252,7 @@ function getDistanceToNearestTarget(cursorX, cursorY) {
         path.style.display = "none";
     }
 
-    // Bubble grows to edge
+    // Return the distance the Bubble needs to grow to touch nearest target edge
     return Math.max(0, closestCenterDist - closest.radius);
 }
 
@@ -298,7 +306,7 @@ function generateRandomTargets(containerId, bounds) {
     }
 
     if (attempts >= 10000) {
-        console.warn("Could not place all targets without overlap.");
+        console.error("Could not place all targets WITHOUT overlap!");
     }
 }
 
