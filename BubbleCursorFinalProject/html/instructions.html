@@ -14,41 +14,46 @@
                 <h2>Instructions</h2>
                 <hr>
                 <p>
-                    This experiment will take approximately 5 minutes to complete. Once all trials are completed, you will be presented with a summary of your performance and the option to download your data as a CSV.
+                    This experiment will take approximately 5 minutes to complete. Once all trials are completed, you will be given an overview of your performance.
                 </p>
                 <hr>
 
                 <h4>Study Trial Overview</h4>
                 <ul>
                     <li><strong>Targets:</strong> Circular items placed randomly on the screen. Some are <span style="color: green; font-weight: bold;">green (valid)</span>, others are gray (distractors).</li>
-                    <li><strong>Selection:</strong> Simply move your cursor near a green target. The cursor will grow to help you snap to the nearest item.</li>
-                    <li><strong>Click to Confirm:</strong> Left-click to select the active target (indicated by the bubble lock).</li>
-                    <li><strong>Speed + Accuracy:</strong> Try to select the green targets as <strong>fast</strong> and <strong>precisely</strong> as possible. Avoid clicking non-green distractors.</li>
+                    <li><strong>Selection:</strong> Move your cursor near a green target. The closest target will be highlighted in this <span style="color: royalblue; font-weight: bold;">blue</span>
+                        and a blue curve that connects the target center with the Bubble Cursor's center.</li>
+                    <li><strong>Click to Confirm:</strong> Left-click to select the active target (indicated by the bubble lock). You will see a bold, yellow ring border appear on that target
+                        to indicate that you have selected it</li>
+                    <li><strong>Speed + Accuracy:</strong> Try to select all the green targets as <strong>fast</strong> and <strong>precisely</strong> as possible. Avoid selected non-green distractors.</li>
                 </ul>
                 <hr>
 
-                <h4>Cursor Behavior</h4>
+                <h4>Bubble Cursor Behavior</h4>
                 <ul>
+                    <li>To enable the Bubble Cursor (bubble mode) simply press CTRL once. To disable press CTRL again.</li>
                     <li>The bubble radius changes dynamically based on target proximity.</li>
-                    <li>The closest target is highlighted automatically.</li>
-                    <li>If multiple targets are close, the cursor may split or wobble to indicate ambiguity (in advanced mode).</li>
-                    <li>No need to perfectly align — just get close and click!</li>
+                    <li>The closest target is highlighted automatically and connected to the bubble cursor via a <span style="color: royalblue; font-weight: bold;">blue</span>.</li>
+                    <li>No need to perfectly align. Let the bubble and curve get close, connect, and click</li>
                 </ul>
 
                 <hr>
                 <h4>Data Collected During Trials?</h4>
-                <p>The system will automatically track the following metrics during each trial:</p>
+                <p>The system will automatically track the following metrics during each trial for both the traditional an:</p>
                 <ul>
                     <li><strong>Time Taken</strong> – How long it takes to complete each selection.</li>
                     <li><strong>Correct Selections</strong> – Number of required targets selected.</li>
                     <li><strong>Incorrect Selections</strong> – Number of extra/non-targets selected.</li>
                     <li><strong>Deselection Actions</strong> – How often users undoes a selection.</li>
+                    <li><strong>Total Cursor Distance</strong> – How much distance the cursor moved throughout the trial while inside the demo area.</li>
                     <li><strong>Overall Accuracy</strong> – The percentage of correct selections.</li>
                 </ul>
                 <hr>
 
-                <button class="btn btn-primary" onclick="location.href='training.html'" style="height: 50px; width: 200px; margin-top: 0.3rem;
-                 transform: translateX(35rem)">Try out Bubble Cursor!</button>
+                <div style="display: flex; justify-content: center; margin-bottom: 1rem; transform: translateX(3rem)">
+                    <button class="btn btn-primary" onclick="location.href='BubbleTraining.html'" style="height: 50px; width: 200px; margin-right: 1rem;">Bubble Cursor Trials</button>
+                    <button class="btn btn-primary" onclick="location.href='TrainingTraining.html'" style="height: 50px; width: 200px;">Traditional Cursor Trials</button>
+                </div>
             </div>
         </div>
     </body>

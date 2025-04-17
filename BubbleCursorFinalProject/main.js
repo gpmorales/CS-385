@@ -13,12 +13,20 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/html/introduction.html'));
 });
 
-app.get('/testing.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/html/testing.html'));
+app.get('/BubbleTesting.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/html/BubbleTesting.html'));
 });
 
-app.get('/training.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/html/training.html'));
+app.get('/BubbleTraining.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/html/BubbleTraining.html'));
+});
+
+app.get('/TraditionalTesting.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/html/TraditionalTesting.html'));
+});
+
+app.get('/TraditionalTraining.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/html/TraditionalTraining.html'));
 });
 
 app.get('/summary.html', (req, res) => {

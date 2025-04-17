@@ -10,6 +10,10 @@ let HIGHLIGHTED_TARGET = null;    // Store the current closest item object
 // Data collection for each trial
 let trialData = [];
 
+// Cursor
+let lastCursorPos = null;                        // { x, y }
+let isCursorInsideDemo = false;
+
 class TrialData {
     constructor(trialNumber, targetCount, totalItemCount) {
         this.trialNumber = trialNumber;                  // Trial number
@@ -18,7 +22,7 @@ class TrialData {
         this.startTime = performance.now();              // Trial start time
         this.endTime = null;                             // Trial end time
         this.timeTaken = null;                           // Duration in seconds
-        this.totalSelections = 0;                        // Total selection made
+        this.totalSelections = 0;                        // Total selections made
         this.correctSelections = 0;                      // Correct selections made
         this.incorrectSelections = 0;                    // Incorrect selections made
         this.deselectedTargets = 0;                      // Number of targets deselected
@@ -36,7 +40,10 @@ class TrialData {
 // **************************** Training Page Event Listener ****************************
 document.addEventListener("DOMContentLoaded", () => {
     // Create custom brush, trail logic, and more
-    if (document.title === "Training") {
+    if (document.title === "BubbleTraining") {
+
+        // Load targets in demo area
+        generateRandomTargets("demo-area", { width: 800, height: 500 });
 
         // Create custom cursor
         const cursor = document.createElement("div");
@@ -99,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // **************************** Testing Page Event Listener ****************************
 document.addEventListener("DOMContentLoaded", () => {
     // Create custom brush, trail logic, and more
-    if (document.title === "Testing") {
+    if (document.title === "BubbleTesting") {
         // Generate first trial setup and record correct counts
         generateRandomTargets("demo-area", { width: 1200, height: 600 });
         let currentTrial = new TrialData(trialData.length + 1, TARGET_SET.size, ITEM_SET.size);
@@ -143,7 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
             // Prepare new trial by resetting targets and params
             currentTrial.endTrial()
             trialData.push(currentTrial);
-            console.log(currentTrial)
             generateRandomTargets("demo-area", { width: 1200, height: 600 });
             currentTrial = new TrialData(trialData.length + 1, TARGET_SET.size, ITEM_SET.size);
         });
@@ -187,19 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Update the bubble size and target selection
-        document.addEventListener("mousemove", (e) => {
-            if (!isCustomCursorActive) return;
-            const x = e.clientX;
-            const y = e.clientY;
-            cursor.style.left = `${e.clientX}px`;
-            cursor.style.top = `${e.clientY}px`;
-
-            const radius = Math.max(20, getDistanceToNearestTarget(x, y));
-            bubbleRing.style.width = `${radius * 2}px`;
-            bubbleRing.style.height = `${radius * 2}px`;
-        });
-
         // Select the highlighted element and add it to selection list
         document.addEventListener("mousedown", (e) => {
             if (e.button === 0 && isCustomCursorActive) {
@@ -214,11 +207,50 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
+
+        // Update the bubble size and target selection
+        document.addEventListener("mousemove", (e) => {
+            if (!isCustomCursorActive) return;
+
+            const x = e.clientX;
+            const y = e.clientY;
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+
+            const radius = Math.max(20, getDistanceToNearestTarget(x, y));
+            bubbleRing.style.width = `${radius * 2}px`;
+            bubbleRing.style.height = `${radius * 2}px`;
+
+            // Update cursor distance
+            if (isCursorInsideDemo) {
+                const x = e.clientX;
+                const y = e.clientY;
+                if (lastCursorPos) {
+                    const dx = x - lastCursorPos.x;
+                    const dy = y - lastCursorPos.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    currentTrial.totalCursorDistance += dist;
+                }
+                lastCursorPos = { x, y };
+            }
+        });
+
+        // Update the cursor flags when it has travelled inside/outside the demo area
+        const demoArea = document.getElementById("demo-area");
+        demoArea.addEventListener("mouseenter", () => {
+            isCursorInsideDemo = true;
+            lastCursorPos = null; // Reset when entering
+        });
+
+        demoArea.addEventListener("mouseleave", () => {
+            isCursorInsideDemo = false;
+            lastCursorPos = null; // Stop tracking
+        });
     }
 });
 
 
-// Utility functions:
+/**      Utility functions     **/
 function getDistanceToNearestTarget(cursorX, cursorY) {
     const demoArea = document.getElementById("demo-area");
     const demoRect = demoArea.getBoundingClientRect();
@@ -353,14 +385,6 @@ function generateRandomTargets(containerId, bounds) {
         console.error("Could not place all targets WITHOUT overlap!");
     }
 }
-
-
-// Load demo area
-document.addEventListener("DOMContentLoaded", () => {
-    if (document.title === "Training") {
-        generateRandomTargets("demo-area", { width: 800, height: 500 });
-    }
-});
 
 
 // **************************** Summary Page Event Listener ****************************
