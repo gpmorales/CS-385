@@ -37,7 +37,7 @@ class TrialData {
 }
 
 
-// **************************** Training Page Event Listener ****************************
+// **************************** Bubble Mouse Training Page Event Listener ****************************
 document.addEventListener("DOMContentLoaded", () => {
     // Create custom brush, trail logic, and more
     if (document.title === "BubbleTraining") {
@@ -103,13 +103,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// **************************** Testing Page Event Listener ****************************
+// **************************** Bubble Mouse Testing Page Event Listener ****************************
 document.addEventListener("DOMContentLoaded", () => {
     // Create custom brush, trail logic, and more
     if (document.title === "BubbleTesting") {
         // Generate first trial setup and record correct counts
-        generateRandomTargets("demo-area", { width: 1200, height: 600 });
-        let currentTrial = new TrialData(trialData.length + 1, TARGET_SET.size, ITEM_SET.size);
+        const { targetCount, totalItemCount } = generateRandomTargets("demo-area", { width: 1200, height: 600 });
+        let currentTrial = new TrialData(trialData.length + 1, targetCount, totalItemCount);
 
         // IMPORTANT: Handle Next Trial and Finish
         document.getElementById("next-trial-btn").addEventListener("click", () => {
@@ -150,8 +150,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Prepare new trial by resetting targets and params
             currentTrial.endTrial()
             trialData.push(currentTrial);
-            generateRandomTargets("demo-area", { width: 1200, height: 600 });
-            currentTrial = new TrialData(trialData.length + 1, TARGET_SET.size, ITEM_SET.size);
+            const { targetCount, totalItemCount } = generateRandomTargets("demo-area", { width: 1200, height: 600 });
+            currentTrial = new TrialData(trialData.length + 1, targetCount, totalItemCount);
         });
 
         document.getElementById("finish-btn").addEventListener("click", () => {
@@ -232,6 +232,137 @@ document.addEventListener("DOMContentLoaded", () => {
                     currentTrial.totalCursorDistance += dist;
                 }
                 lastCursorPos = { x, y };
+            }
+        });
+
+        // Update the cursor flags when it has travelled inside/outside the demo area
+        const demoArea = document.getElementById("demo-area");
+        demoArea.addEventListener("mouseenter", () => {
+            isCursorInsideDemo = true;
+            lastCursorPos = null; // Reset when entering
+        });
+
+        demoArea.addEventListener("mouseleave", () => {
+            isCursorInsideDemo = false;
+            lastCursorPos = null; // Stop tracking
+        });
+    }
+});
+
+
+// **************************** Traditional Mouse Training Page Event Listener ****************************
+document.addEventListener("DOMContentLoaded", () => {
+    // Create custom brush, trail logic, and more
+    if (document.title === "TraditionalTraining") {
+        // Load targets in demo area
+        generateRandomTargets("demo-area", { width: 800, height: 500 });
+
+        // Add the highlighted element to list
+        document.addEventListener("mousedown", (e) => {
+            if (e.button === 0 && e.target.classList.contains("random-target")) {
+                e.target.classList.toggle("selected");
+            }
+        });
+    }
+});
+
+
+// **************************** Traditional Mouse Testing Page Event Listener ****************************
+document.addEventListener("DOMContentLoaded", () => {
+    // Create custom brush, trail logic, and more
+    if (document.title === "TraditionalTesting") {
+
+        // Generate first trial setup and record correct counts
+        const { targetCount, totalItemCount } = generateRandomTargets("demo-area", { width: 1200, height: 600 });
+        let currentTrial = new TrialData(trialData.length + 1, targetCount, totalItemCount);
+
+        // IMPORTANT: Handle Next Trial and Finish
+        document.getElementById("next-trial-btn").addEventListener("click", () => {
+            // Save Trial Data
+            if (currentTrial.trialNumber === TRIAL_COUNT - 1) {
+                // Hide next button
+                document.getElementById("next-trial-btn").style.display = "none";
+                // Show finish button
+                const finishButton = document.getElementById('finish-btn');
+                finishButton.removeAttribute('hidden');
+            }
+
+            // Analyze the metrics and data for this trial
+            let correctSelections = 0;
+            let incorrectSelections = 0;
+            let deselectedTargets = 0;
+            let deselectedNonTargets = 0;
+
+            // Count correct/incorrect selections
+            SELECTION_SET.forEach((item, id) => {
+                if (TARGET_SET.has(id)) correctSelections++;
+                else incorrectSelections++;
+            });
+
+            // Count de-selections (previously selected, now not in final set)
+            DESELECTION_SET.forEach((item, id) => {
+                if (TARGET_SET.has(id)) deselectedTargets++;
+                else deselectedNonTargets++;
+            });
+
+            // Store data in trial object
+            currentTrial.totalSelections = SELECTION_SET.size;
+            currentTrial.correctSelections = correctSelections;
+            currentTrial.incorrectSelections = incorrectSelections;
+            currentTrial.deselectedTargets = deselectedTargets;
+            currentTrial.deselectedNonTargets = deselectedNonTargets;
+
+            // Prepare new trial by resetting targets and params
+            currentTrial.endTrial()
+            console.log(currentTrial)
+            trialData.push(currentTrial);
+            const { targetCount, totalItemCount } = generateRandomTargets("demo-area", { width: 1200, height: 600 });
+            currentTrial = new TrialData(trialData.length + 1, targetCount, totalItemCount);
+        });
+
+        document.getElementById("finish-btn").addEventListener("click", () => {
+            // Record final trial
+            currentTrial.endTrial()
+            trialData.push(currentTrial);
+            localStorage.setItem('trialData', JSON.stringify(trialData));
+            window.location.href = "/html/summary.html";
+        });
+
+        // Update the cursor distance
+        document.addEventListener("mousemove", (e) => {
+            // Update cursor distance
+            if (isCursorInsideDemo) {
+                const x = e.clientX;
+                const y = e.clientY;
+                if (lastCursorPos) {
+                    const dx = x - lastCursorPos.x;
+                    const dy = y - lastCursorPos.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    currentTrial.totalCursorDistance += dist;
+                }
+                lastCursorPos = { x, y };
+            }
+        });
+
+        // Add the selected element to the list
+        document.addEventListener("mousedown", (e) => {
+            if (e.button === 0 && e.target.classList.contains("random-target")) {
+                // Find the ID of the clicked target
+                let selectedId = null;
+                ITEM_SET.forEach((value, key) => {
+                    if (value.element === e.target) {
+                        selectedId = key;
+                    }
+                });
+
+                // Toggle the selection and save deselection
+                e.target.classList.toggle("selected");
+                if (e.target.classList.contains("selected")) {
+                    SELECTION_SET.set(selectedId, ITEM_SET.get(selectedId));
+                } else {
+                    SELECTION_SET.delete(selectedId);
+                    DESELECTION_SET.set(selectedId, ITEM_SET.get(selectedId));
+                }
             }
         });
 
@@ -383,6 +514,10 @@ function generateRandomTargets(containerId, bounds) {
 
     if (attempts >= 10000) {
         console.error("Could not place all targets WITHOUT overlap!");
+    } else if (TARGET_SET.size !== targetCount || ITEM_SET.size !== totalItemCount) {
+        console.error("Could not append required number of targets or items!");
+    } else {
+        return { targetCount, totalItemCount }
     }
 }
 
