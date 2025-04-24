@@ -10,22 +10,21 @@
         <title>BubbleTesting</title>
     </head>
     <body>
-        <br>
         <div class="container">
+            <br>
             <h2>Testing Area</h2>
+            <p class="mb-0 me-3">
+                Hit 'Ctrl' to toggle the Bubble Cursor. <strong>Hit 'Enter' to proceed to the next trial</strong> | [<span id="trial-counter">Trial 1 out of 20</span>]
+            </p>
             <hr>
             <div id="demo-area"></div>
         </div>
 
-        <button id="next-trial-btn" class="btn btn-primary"
-                style="position: fixed; left: calc(50% + 620px + 1rem); top: calc(150px + 315px); transform: translateY(-50%); z-index: 1000;">Next Trial</button>
-
         <button type="button" class="btn btn-primary" id="finish-btn"
-                style="position: fixed; left: calc(50% + 620px + 1rem); top: calc(150px + 315px); transform: translateY(-50%); z-index: 1000;" hidden="hidden">Finish</button>
+                style="position: fixed; left: calc(50% + 620px + 1rem); top: calc(465px); transform: translateY(-50%); z-index: 1000;" hidden="hidden">Finish</button>
 
         <svg id="bubble-pull-visual" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;">
             <path id="pull-curve" d="" />
         </svg>
-
     </body>
 </html>
