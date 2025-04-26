@@ -1,5 +1,5 @@
 // Global Variables and Constants
-const TRIAL_COUNT = 20;
+const TRIAL_COUNT = 3;
 
 let ITEM_SET = new Map();               // Map<id, obj>
 let TARGET_SET = new Map();             // Map<id, obj>
@@ -116,17 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // IMPORTANT: Handle Next Trial and Finish
         document.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" && currentTrial.trialNumber < TRIAL_COUNT) {
-                // Save Trial Data
-                if (currentTrial.trialNumber === TRIAL_COUNT - 1) {
-                    // Show finish button
-                    const finishButton = document.getElementById('finish-btn');
-                    finishButton.removeAttribute('hidden');
-                }
-
-                // Update trial counter in the HTML
-                updateTrialCounter(currentTrial.trialNumber + 1, TRIAL_COUNT);
-
+            if (e.key === "Enter") {
                 // Analyze the metrics and data for this trial
                 let correctSelections = 0;
                 let incorrectSelections = 0;
@@ -151,34 +141,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentTrial.incorrectSelections = incorrectSelections;
                 currentTrial.deselectedTargets = deselectedTargets;
                 currentTrial.deselectedNonTargets = deselectedNonTargets;
-
                 currentTrial.netDeselectRate = currentTrial.totalSelections > 0
-                    ? ((currentTrial.deselectedTargets + currentTrial.deselectedNonTargets) / currentTrial.totalSelections * 100).toFixed(1) + "%"
-                    : "—";
-
+                    ? (currentTrial.deselectedTargets + currentTrial.deselectedNonTargets) / currentTrial.totalSelections : -1;
                 currentTrial.targetDeselectRate = currentTrial.correctSelections > 0
-                    ? (currentTrial.deselectedTargets / currentTrial.correctSelections * 100).toFixed(1) + "%"
-                    : "—";
-
+                    ? (currentTrial.deselectedTargets / currentTrial.correctSelections) : -1;
                 currentTrial.netAccuracy = currentTrial.targetCount > 0
-                    ? ((currentTrial.correctSelections / currentTrial.targetCount) * 100).toFixed(1) + "%"
-                    : "—";
+                    ? (currentTrial.correctSelections / currentTrial.targetCount) : -1;
 
                 // Prepare new trial by resetting targets and params
                 currentTrial.endTrial()
                 trialData.push(currentTrial);
-                const {targetCount, totalItemCount} = generateRandomTargets("demo-area", {width: 1200, height: 600});
-                currentTrial = new TrialData(trialData.length + 1, targetCount, totalItemCount);
-                updateTrialCounter(currentTrial.trialNumber, TRIAL_COUNT);
-            }
-        });
 
-        document.getElementById("finish-btn").addEventListener("click", () => {
-            // Record final trial
-            currentTrial.endTrial()
-            trialData.push(currentTrial);
-            localStorage.setItem('trialData', JSON.stringify(trialData));
-            window.location.href = "/html/summary.html";
+                // End if final trial
+                if (trialData.length === TRIAL_COUNT) {
+                    localStorage.setItem('trialData', JSON.stringify(trialData));
+                    window.location.href = "/html/summary.html";
+                } else {
+                    // Update trial counter in the HTML
+                    updateTrialCounter(currentTrial.trialNumber + 1, TRIAL_COUNT);
+                    const {targetCount, totalItemCount} = generateRandomTargets("demo-area", {width: 1200, height: 600});
+                    currentTrial = new TrialData(trialData.length + 1, targetCount, totalItemCount);
+                }
+            }
         });
 
         // Create custom cursor
@@ -297,17 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // IMPORTANT: Handle Next Trial and Finish
         document.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" && currentTrial.trialNumber < TRIAL_COUNT) {
-                // Save Trial Data
-                if (currentTrial.trialNumber === TRIAL_COUNT - 1) {
-                    // Show finish button
-                    const finishButton = document.getElementById('finish-btn');
-                    finishButton.removeAttribute('hidden');
-                }
-
-                // Update trial counter in the HTML
-                updateTrialCounter(currentTrial.trialNumber + 1, TRIAL_COUNT);
-
+            if (e.key === "Enter") {
                 // Analyze the metrics and data for this trial
                 let correctSelections = 0;
                 let incorrectSelections = 0;
@@ -332,33 +306,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentTrial.incorrectSelections = incorrectSelections;
                 currentTrial.deselectedTargets = deselectedTargets;
                 currentTrial.deselectedNonTargets = deselectedNonTargets;
-
                 currentTrial.netDeselectRate = currentTrial.totalSelections > 0
-                    ? ((currentTrial.deselectedTargets + currentTrial.deselectedNonTargets) / currentTrial.totalSelections * 100).toFixed(1) + "%"
-                    : "—";
-
+                    ? (currentTrial.deselectedTargets + currentTrial.deselectedNonTargets) / currentTrial.totalSelections : -1;
                 currentTrial.targetDeselectRate = currentTrial.correctSelections > 0
-                    ? (currentTrial.deselectedTargets / currentTrial.correctSelections * 100).toFixed(1) + "%"
-                    : "—";
-
+                    ? (currentTrial.deselectedTargets / currentTrial.correctSelections) : -1;
                 currentTrial.netAccuracy = currentTrial.targetCount > 0
-                    ? ((currentTrial.correctSelections / currentTrial.targetCount) * 100).toFixed(1) + "%"
-                    : "—";
+                    ? (currentTrial.correctSelections / currentTrial.targetCount) : -1;
 
                 // Prepare new trial by resetting targets and params
                 currentTrial.endTrial()
                 trialData.push(currentTrial);
-                const {targetCount, totalItemCount} = generateRandomTargets("demo-area", {width: 1200, height: 600});
-                currentTrial = new TrialData(trialData.length + 1, targetCount, totalItemCount);
-            }
-        });
 
-        document.getElementById("finish-btn").addEventListener("click", () => {
-            // Record final trial
-            currentTrial.endTrial()
-            trialData.push(currentTrial);
-            localStorage.setItem('trialData', JSON.stringify(trialData));
-            window.location.href = "/html/summary.html";
+                // End if final trial
+                if (trialData.length === TRIAL_COUNT) {
+                    localStorage.setItem('trialData', JSON.stringify(trialData));
+                    window.location.href = "/html/summary.html";
+                } else {
+                    // Update trial counter in the HTML
+                    updateTrialCounter(currentTrial.trialNumber + 1, TRIAL_COUNT);
+                    const {targetCount, totalItemCount} = generateRandomTargets("demo-area", {width: 1200, height: 600});
+                    currentTrial = new TrialData(trialData.length + 1, targetCount, totalItemCount);
+                }
+            }
         });
 
         // Update the cursor distance
@@ -578,9 +547,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${trial.incorrectSelections}</td>
                 <td>${trial.deselectedTargets}</td>
                 <td>${trial.deselectedNonTargets}</td>
-                <td>${trial.netDeselectRate}</td>
-                <td>${trial.targetDeselectRate}</td>
-                <td>${trial.netAccuracy}</td>
+                <td>${(100 * trial.netDeselectRate).toFixed(1) + "%"}</td>
+                <td>${(100 * trial.targetDeselectRate).toFixed(1) + "%"}</td>
+                <td>${(100 * trial.netAccuracy).toFixed(1) + "%"}</td>
                 <td>${Math.round(trial.totalCursorDistance)}</td>
             `;
             tableBody.appendChild(row);
