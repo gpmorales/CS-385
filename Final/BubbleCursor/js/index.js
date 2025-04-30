@@ -1,5 +1,5 @@
 // Global Variables and Constants
-const TRIAL_COUNT = 3;
+const TRIAL_COUNT = 20;
 
 let ITEM_SET = new Map();               // Map<id, obj>
 let TARGET_SET = new Map();             // Map<id, obj>
